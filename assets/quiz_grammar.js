@@ -7,6 +7,9 @@ window.Grammar = (function(){
   let locked = false;
   let title = "";
 
+  // NEW: store wrong questions for "retry wrong" after finish
+  let wrongItems = [];
+
   function shuffle(arr){
     for(let i=arr.length-1;i>0;i--){
       const j = Math.floor(Math.random()*(i+1));
@@ -23,6 +26,9 @@ window.Grammar = (function(){
     current = null;
     locked = false;
     title = topicTitle;
+
+    // NEW: reset wrong set each run
+    wrongItems = [];
 
     const root = UI.el("screenGrammar");
     root.innerHTML = `
@@ -109,6 +115,10 @@ window.Grammar = (function(){
       btn.classList.add("correct");
     }else{
       btn.classList.add("wrong");
+
+      // NEW: remember wrong question (avoid duplicates by question text)
+      const exists = wrongItems.some(x => (x.question || "") === (current.question || ""));
+      if(!exists) wrongItems.push(current);
     }
 
     const explain = UI.el("grExplain");
@@ -122,17 +132,25 @@ window.Grammar = (function(){
 
   function finishScreen(){
     const root = UI.el("screenGrammar");
+    const hasWrong = wrongItems.length > 0;
+
     root.innerHTML = `
       <div class="quiz-wrap">
         <div class="finish">
           <h2>✅ Finish</h2>
           <div class="muted">Kết quả: đúng <strong>${correctCount}</strong> / ${order.length} câu</div>
+          ${hasWrong ? `<div class="muted">Câu sai: <strong>${wrongItems.length}</strong></div>` : ``}
         </div>
         <div class="nextbar">
+          ${hasWrong ? `<button class="next" id="grRetryWrong">Làm lại câu sai</button>` : ``}
           <button class="next" id="grRestart">Restart</button>
         </div>
       </div>
     `;
+
+    if(hasWrong){
+      UI.el("grRetryWrong").onclick = ()=> start(wrongItems, `${title} — Câu sai`);
+    }
     UI.el("grRestart").onclick = ()=> start(items, title);
   }
 
