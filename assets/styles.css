@@ -182,3 +182,71 @@ body{
 .muted{color:var(--muted)}
 .finish{text-align:center; padding:22px 10px;}
 .finish h2{margin:0 0 6px}
+
+/* ===== Mobile & iOS polish (append at end) ===== */
+
+/* iOS safe area + tránh lỗi 100vh */
+body{
+  min-height: 100svh;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Chữ câu hỏi co giãn theo màn hình (PC/iPad/iPhone) */
+.qtext{
+  font-size: clamp(20px, 4.2vw, 28px);
+  line-height: 1.35;
+}
+
+/* Tối ưu topbar cho màn nhỏ */
+@media (max-width: 520px){
+  .topbar{
+    padding: 8px 10px;
+  }
+  .brand{
+    font-size: 14px;
+  }
+  .pill{
+    padding: 7px 10px;
+    font-size: 14px;
+  }
+  .app{
+    padding: 10px;
+  }
+}
+
+/* Nút tròn và Next dễ bấm hơn trên iPhone */
+@media (max-width: 520px){
+  .circle{
+    width: 58px;
+    height: 58px;
+    font-size: 26px;
+  }
+  .next{
+    font-size: 17px;
+    padding: 14px 16px;
+  }
+}
+
+/* Grammar options: 1 cột trên iPhone để không chật */
+@media (max-width: 620px){
+  .options{
+    grid-template-columns: 1fr;
+  }
+  .opt{
+    font-size: 16px;
+    padding: 14px 14px;
+  }
+}
+
+/* “Next” dính đáy màn hình cho iPhone/iPad khi nội dung dài */
+@media (max-width: 820px){
+  .nextbar{
+    position: sticky;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    padding-top: 8px;
+    background: linear-gradient(to top, rgba(245,246,250,.95), rgba(245,246,250,0));
+  }
+}
+
+/* Giảm cảm giác bị “cuộn xuống dưới” khi bấm Start */
+.screen[hidden]{ display:none !important; }

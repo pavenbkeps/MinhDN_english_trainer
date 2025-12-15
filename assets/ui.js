@@ -7,6 +7,7 @@ window.UI = (function(){
       const node = el(s);
       if(node) node.hidden = (s !== name);
     }
+    window.scrollTo({ top: 0, behavior: "auto" });
   }
   function setLoading(isLoading, text){
     const loading = el("loading");
