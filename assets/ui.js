@@ -2,13 +2,22 @@ window.UI = (function(){
   const el = (id)=>document.getElementById(id);
 
   function showScreen(name){
-    const screens = ["screenHome","screenSpeaking","screenGrammar"];
-    for(const s of screens){
-      const node = el(s);
-      if(node) node.hidden = (s !== name);
-    }
-    window.scrollTo({ top: 0, behavior: "auto" });
+  const screens = ["screenHome","screenSpeaking","screenGrammar"];
+  for(const s of screens){
+    const node = el(s);
+    if(node) node.hidden = (s !== name);
   }
+
+  // Cuộn về đầu screen đang mở (ổn định hơn trên iOS)
+  const active = el(name);
+  if(active) active.scrollTop = 0;
+
+  // Ép Safari bỏ vị trí cuộn cũ của page
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  }
+
+
   function setLoading(isLoading, text){
     const loading = el("loading");
     if(!loading) return;
