@@ -3,20 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>English Trainer DO NHAT MINH</title>
+  <title>Minh’s English Trainer</title>
   <link rel="stylesheet" href="./assets/styles.css" />
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">🖊️ <strong>English Trainer V5</strong></div>
+    <div class="brand">
+      <div class="brand-mark">🎧</div>
+      <div class="brand-text">
+        <div class="brand-title">Minh’s English Trainer</div>
+        <div class="brand-sub">Self-practice website • Son La, Vietnam</div>
+      </div>
+    </div>
+
     <div class="topbar-actions">
-      <button id="btnHome" class="pill">Home</button>
-      <button id="btnStop" class="pill">Stop</button>
+      <button id="btnHome" class="pill" title="Home">🏠 Home</button>
+      <button id="btnStop" class="pill danger" title="Stop TTS">⏹ Stop</button>
     </div>
   </header>
 
   <main id="app" class="app">
-    <div id="loading" class="loading">Loading Speaking + Grammar + Pronunciation…</div>
+    <div id="loading" class="loading">Loading…</div>
     <section id="screenHome" class="screen" hidden></section>
     <section id="screenSpeaking" class="screen" hidden></section>
     <section id="screenGrammar" class="screen" hidden></section>

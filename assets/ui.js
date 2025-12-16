@@ -8,11 +8,9 @@ window.UI = (function(){
       if(node) node.hidden = (s !== name);
     }
 
-    // Cuộn về đầu screen đang mở (ổn định hơn trên iOS)
     const active = el(name);
     if(active) active.scrollTop = 0;
 
-    // Ép Safari bỏ vị trí cuộn cũ của page
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }
@@ -30,16 +28,43 @@ window.UI = (function(){
       .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
   }
 
+  function renderHero(home, counts){
+    const totalSpeak = counts?.speaking?.["Tổng hợp"] ?? 0;
+    const totalGram  = counts?.grammar?.["Tổng hợp"] ?? 0;
+    const totalPron  = counts?.pronunciation?.["Tổng hợp"] ?? 0;
+
+    const hero = document.createElement("div");
+    hero.className = "hero";
+    hero.innerHTML = `
+      <div class="hero-inner">
+        <div class="hero-title">Do Nhat Minh’s English Practice</div>
+        <div class="hero-sub">A simple self-study website for primary students • Son La, Vietnam</div>
+
+        <div class="hero-chips">
+          <div class="chip">🖊️ Speaking <span class="chip-num">${totalSpeak}</span></div>
+          <div class="chip">🧩 Grammar <span class="chip-num">${totalGram}</span></div>
+          <div class="chip">🔊 Pronunciation <span class="chip-num">${totalPron}</span></div>
+        </div>
+
+        <div class="hero-note">Tip: Add to Home Screen on iPad/iPhone for an app-like experience.</div>
+      </div>
+    `;
+    home.appendChild(hero);
+  }
+
   function renderHome({speakingTopics, grammarTopics, pronunciationTopics = [], counts, onStartSpeaking, onStartGrammar, onStartPronunciation}){
     const home = el("screenHome");
     home.innerHTML = "";
+
+    // NEW: Hero intro
+    renderHero(home, counts);
 
     const speakingSection = document.createElement("div");
     speakingSection.className = "section";
     speakingSection.innerHTML = `
       <div class="section-head">
         <div class="section-title">🖊️ Speaking</div>
-        <div class="section-sub">Next sẽ tự đọc Question</div>
+        <div class="section-sub">Tap Start → Next will read the next question</div>
       </div>
       <div class="grid" id="gridSpeaking"></div>
     `;
@@ -69,7 +94,7 @@ window.UI = (function(){
     grammarSection.innerHTML = `
       <div class="section-head">
         <div class="section-title">🧩 Grammar (MCQ)</div>
-        <div class="section-sub">Next sẽ tự đọc Question</div>
+        <div class="section-sub">Choose A/B/C/D → see explanation</div>
       </div>
       <div class="grid" id="gridGrammar"></div>
     `;
@@ -94,14 +119,13 @@ window.UI = (function(){
       gridGrammar.appendChild(card);
     }
 
-    // Pronunciation (IOE)
     if(pronunciationTopics && pronunciationTopics.length && typeof onStartPronunciation === "function"){
       const prSection = document.createElement("div");
       prSection.className = "section";
       prSection.innerHTML = `
         <div class="section-head">
           <div class="section-title">🔊 Pronunciation</div>
-          <div class="section-sub">Nghe & chọn (IOE)</div>
+          <div class="section-sub">Listen & choose (IOE style)</div>
         </div>
         <div class="grid" id="gridPron"></div>
       `;
