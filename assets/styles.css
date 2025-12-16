@@ -264,3 +264,39 @@ body{
   }
   .screen[hidden]{ display:none !important; }
 }
+
+/* ===== Pronunciation additions ===== */
+.btn.green{background:#16a34a;}
+.opt-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.opt-text{flex:1; min-width:0;}
+.opt-say{
+  flex:0 0 auto;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:12px;
+  padding:8px 10px;
+  font-weight:900;
+}
+.opt-say:active{transform:scale(.98)}
+.finish-box{
+  margin-top:12px;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:#f9fafb;
+}
+.finish-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:10px;
+}
+.finish-actions .btn{
+  min-width:160px;
+}

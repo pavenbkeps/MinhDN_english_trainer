@@ -10,6 +10,7 @@ window.Data = (function(){
     if(!r.ok) throw new Error("Fetch failed: "+r.status);
     return await r.text();
   }
+
   function parseSpeaking(csvText){
     const rows = csvText.split(/\r?\n/).filter(Boolean);
     let start = 0;
@@ -26,6 +27,7 @@ window.Data = (function(){
     }
     return items;
   }
+
   function parseGrammar(csvText){
     const rows = csvText.split(/\r?\n/).filter(Boolean);
     let start = 0;
@@ -50,13 +52,58 @@ window.Data = (function(){
     }
     return items;
   }
+
+  // NEW: Pronunciation
+  function parsePronunciation(csvText){
+    const rows = csvText.split(/\r?\n/).filter(Boolean);
+    let start = 0;
+    if(rows[0] && rows[0].toLowerCase().includes("topic")) start = 1;
+    const items = [];
+    for(let i=start;i<rows.length;i++){
+      const cols = smartSplitCSVLine(rows[i]);
+      // Expect: topic,type,prompt,target,A,B,C,D,correct,explain
+      if(cols.length < 10) continue;
+      const item = {
+        topic: stripQuotes(cols[0]),
+        type: stripQuotes(cols[1]),
+        prompt: stripQuotes(cols[2]),
+        target: stripQuotes(cols[3]),
+        A: stripQuotes(cols[4]),
+        B: stripQuotes(cols[5]),
+        C: stripQuotes(cols[6]),
+        D: stripQuotes(cols[7]),
+        correct: stripQuotes(cols[8]).toUpperCase(),
+        explain: stripQuotes(cols[9]),
+      };
+      if(!item.topic || !item.type || !item.prompt) continue;
+
+      // Minimal pair may only have A/B
+      const validAB = ["A","B"].includes(item.correct);
+      const validABCD = ["A","B","C","D"].includes(item.correct);
+      const hasC = !!item.C;
+      const hasD = !!item.D;
+
+      if((hasC || hasD)){
+        if(!validABCD) continue;
+      }else{
+        if(!validAB) continue;
+      }
+
+      if(!item.A || !item.B) continue;
+      items.push(item);
+    }
+    return items;
+  }
+
   function topicsWithAll(items){
     const topics = Array.from(new Set(items.map(x=>x.topic).filter(Boolean)));
     return ["Tổng hợp", ...topics.filter(t=>t!=="Tổng hợp")];
   }
+
   function filterByTopic(items, topic){
     if(topic === "Tổng hợp") return items.slice();
     return items.filter(x=>x.topic === topic);
   }
-  return {fetchCSV, parseSpeaking, parseGrammar, topicsWithAll, filterByTopic};
+
+  return {fetchCSV, parseSpeaking, parseGrammar, parsePronunciation, topicsWithAll, filterByTopic};
 })();
