@@ -114,10 +114,12 @@ window.Pronunciation = (function(){
     const ex = UI.el("prExplain");
     ex.hidden = true;
     ex.innerHTML = "";
+    UI.el("screenPronunciation").dataset.answered = "0";
   }
 
   function choose(letter){
     locked = true;
+    UI.el("screenPronunciation").dataset.answered = "1";
 
     const correct = current.correct;
     const opts = UI.el("prOpts").querySelectorAll(".opt");
@@ -236,12 +238,13 @@ window.Pronunciation = (function(){
         </div>
       </div>
     `;
-
+    UI.el("screenPronunciation").dataset.answered = "0";
     UI.el("prTitle").textContent = topicTitle;
     UI.el("prSay").onclick = ()=> speakTarget();
-
+    
     UI.el("prNext").onclick = ()=>{
-      if(!locked){
+      const answered = UI.el("screenPronunciation").dataset.answered === "1";
+      if(!answered){
         const ex = UI.el("prExplain");
         ex.hidden = false;
         ex.innerHTML = "👉 Hãy chọn 1 đáp án trước khi bấm Next.";
@@ -249,6 +252,7 @@ window.Pronunciation = (function(){
       }
       goNext();
     };
+
 
     TTS.warmUp();
     startFirst();
