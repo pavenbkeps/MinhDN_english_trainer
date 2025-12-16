@@ -1,7 +1,7 @@
 window.Pronunciation = (function(){
   let items = [];
   let order = [];
-  let idx = 0;
+  let qIndex = 0; // index câu hiện tại (0-based)
   let correctCount = 0;
   let wrongIdxs = [];
   let current = null;
@@ -60,9 +60,10 @@ window.Pronunciation = (function(){
 
   function setProgress(){
     const total = order.length;
-    const done = Math.min(idx, total);
-    UI.el("prProg").textContent = `${done}/${total} • ✅ ${correctCount}`;
+    const cur = Math.min(qIndex + 1, total);
+    UI.el("prProg").textContent = `${cur}/${total} • ✅ ${correctCount}`;
   }
+
 
   function speakTarget(){
     if(!current) return;
@@ -74,7 +75,7 @@ window.Pronunciation = (function(){
 
   function renderQuestion(){
     locked = false;
-    current = items[ order[idx] ];
+    current = items[ order[qIndex] ];
     setProgress();
 
     UI.el("prTitle").textContent = title;
@@ -129,7 +130,7 @@ window.Pronunciation = (function(){
     if(letter === correct){
       correctCount++;
     }else{
-      wrongIdxs.push(order[idx]);
+      wrongIdxs.push(order[qIndex]);
     }
 
     const ex = UI.el("prExplain");
@@ -183,19 +184,25 @@ window.Pronunciation = (function(){
     };
   }
 
-  function next(){
-    if(idx >= order.length){
+
+  function goNext(){
+    qIndex++;
+    if(qIndex >= order.length){
       finish();
       return;
     }
     renderQuestion();
-    idx++;
+  }
+
+  function startFirst(){
+    qIndex = 0;
+    renderQuestion();
   }
 
   function start(topicItems, topicTitle){
     items = topicItems.slice();
     order = shuffle(items.map((_,i)=>i));
-    idx = 0;
+    qIndex = 0;
     correctCount = 0;
     wrongIdxs = [];
     current = null;
@@ -240,11 +247,11 @@ window.Pronunciation = (function(){
         ex.innerHTML = "👉 Hãy chọn 1 đáp án trước khi bấm Next.";
         return;
       }
-      next();
+      goNext();
     };
 
     TTS.warmUp();
-    next();
+    startFirst();
   }
 
   return {start};
