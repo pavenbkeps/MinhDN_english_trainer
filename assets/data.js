@@ -77,19 +77,52 @@ window.Data = (function(){
       };
       if(!item.topic || !item.type || !item.prompt) continue;
 
+      // --- Validation / normalization ---
+      // Sheet "Pronunciation" currently uses two patterns:
+      // 1) Most types: correct = A/B/C/D (letter)
+      // 2) minimal_pair: correct = the correct WORD (not the letter)
+
       // Minimal pair may only have A/B
-      const validAB = ["A","B"].includes(item.correct);
-      const validABCD = ["A","B","C","D"].includes(item.correct);
       const hasC = !!item.C;
       const hasD = !!item.D;
 
+      // Always require at least A/B
+      if(!item.A || !item.B) continue;
+
+      if((item.type || "").toLowerCase() === "minimal_pair"){
+        // If Correct column is already A/B, keep it.
+        // Otherwise treat it as the correct WORD to be spoken.
+        const raw = (item.correct || "").toString().trim();
+        const upper = raw.toUpperCase();
+        if(["A","B"].includes(upper)){
+          item.correct = upper;
+          item.correct_word = (item[upper] || "").toString();
+        }else{
+          item.correct_word = raw;
+          // Map the correct WORD to a letter by matching against options.
+          const norm = (s)=> (s||"").toString().replace(/\([^)]*\)/g, "").trim().toLowerCase();
+          const cw = norm(raw);
+          const candidates = [
+            ["A", item.A],
+            ["B", item.B],
+          ];
+          const hit = candidates.find(([_, t]) => norm(t) === cw);
+          if(!hit) continue; // can't determine which option is correct
+          item.correct = hit[0];
+        }
+        items.push(item);
+        continue;
+      }
+
+      // Other types: keep existing strict validation
+      const validABCD = ["A","B","C","D"].includes(item.correct);
+      const validAB = ["A","B"].includes(item.correct);
       if((hasC || hasD)){
         if(!validABCD) continue;
       }else{
         if(!validAB) continue;
       }
 
-      if(!item.A || !item.B) continue;
       items.push(item);
     }
     return items;

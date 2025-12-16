@@ -67,6 +67,18 @@ window.Pronunciation = (function(){
 
   function speakTarget(){
     if(!current) return;
+
+    // Special case: minimal_pair (Nghe và chọn từ đúng)
+    // We want the 🔊 button to speak the correct WORD (column "Correct"),
+    // but never show that word as text on screen.
+    const t = (current.type || "").toString().toLowerCase();
+    if(t === "minimal_pair"){
+      const word = current.correct_word || "";
+      const speak = stripParenText(word);
+      if(speak) TTS.speak(speak);
+      return;
+    }
+
     const text = current.target || current.prompt || "";
     const speak = stripParenText(text);
     if(speak) TTS.speak(speak);
