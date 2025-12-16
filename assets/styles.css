@@ -300,3 +300,13 @@ body{
 .finish-actions .btn{
   min-width:160px;
 }
+
+/* Pronunciation: show EN bold, VI in parentheses smaller */
+.en-strong{
+  font-weight: 800;
+}
+.vi-paren{
+  font-size: 0.9em;  /* nhỏ hơn 1 cỡ */
+  opacity: 0.85;
+  margin-left: 6px;
+}

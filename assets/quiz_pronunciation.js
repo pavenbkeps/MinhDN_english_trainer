@@ -21,6 +21,23 @@ window.Pronunciation = (function(){
       .replaceAll("&","&amp;").replaceAll("<","&lt;")
       .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
   }
+  function stripParenText(s){
+    // Bỏ mọi đoạn trong ngoặc tròn: ( ... )
+    return (s ?? "").toString().replace(/\([^)]*\)/g, "").replace(/\s+/g, " ").trim();
+  }
+
+  function formatWithParen(s){
+    // Hiển thị: phần trước ngoặc in đậm, phần trong ngoặc nhỏ hơn
+    const raw = (s ?? "").toString();
+    const m = raw.match(/^([^()]*)\(([^)]*)\)\s*$/);
+    if(!m) return `<span class="en-strong">${escapeHtml(raw)}</span>`;
+    const en = (m[1] ?? "").trim();
+    const vi = (m[2] ?? "").trim();
+    return `
+      <span class="en-strong">${escapeHtml(en)}</span>
+      <span class="vi-paren">(${escapeHtml(vi)})</span>
+    `;
+  }
 
   function buildOption(letter, text){
     const safe = escapeHtml(text || "");
@@ -50,7 +67,9 @@ window.Pronunciation = (function(){
   function speakTarget(){
     if(!current) return;
     const text = current.target || current.prompt || "";
-    if(text) TTS.speak(text);
+    const speak = stripParenText(text);
+    if(speak) TTS.speak(speak);
+
   }
 
   function renderQuestion(){
@@ -60,8 +79,8 @@ window.Pronunciation = (function(){
 
     UI.el("prTitle").textContent = title;
 
-    UI.el("prPrompt").textContent = current.prompt || "";
-    UI.el("prTarget").textContent = current.target || "";
+    UI.el("prPrompt").innerHTML = formatWithParen(current.prompt || "");
+    UI.el("prTarget").innerHTML = formatWithParen(current.target || "");
 
     const optsEl = UI.el("prOpts");
     optsEl.innerHTML = "";
@@ -80,7 +99,8 @@ window.Pronunciation = (function(){
           ev.preventDefault();
           ev.stopPropagation();
           const raw = sayBtn.getAttribute("data-say") || "";
-          if(raw) TTS.speak(raw);
+          const speak = stripParenText(raw);
+          if(speak) TTS.speak(speak);          
           return;
         }
         if(locked) return;
