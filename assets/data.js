@@ -127,6 +127,30 @@ window.Data = (function(){
     }
     return items;
   }
+  
+  function parseVocabulary(csvText){
+    const rows = csvText.split(/\r?\n/).filter(Boolean);
+    let start = 0;
+    if(rows[0] && rows[0].toLowerCase().includes("topic")) start = 1;
+
+    const items = [];
+    for(let i=start;i<rows.length;i++){
+      const cols = smartSplitCSVLine(rows[i]);
+      if(cols.length < 4) continue;
+
+      const topic = stripQuotes(cols[0]);
+      const type = stripQuotes(cols[1]) || "fill_blank";
+      const sentence = stripQuotes(cols[2]);
+      const answer = stripQuotes(cols[3]);
+      const hint_vi = stripQuotes(cols[4] || "");
+      const meaning_vi = stripQuotes(cols[5] || "");
+      const explain_vi = stripQuotes(cols[6] || "");
+
+      if(!topic || !sentence || !answer) continue;
+      items.push({ topic, type, sentence, answer, hint_vi, meaning_vi, explain_vi });
+    }
+    return items;
+  }
 
   function topicsWithAll(items){
     const topics = Array.from(new Set(items.map(x=>x.topic).filter(Boolean)));
@@ -138,5 +162,5 @@ window.Data = (function(){
     return items.filter(x=>x.topic === topic);
   }
 
-  return {fetchCSV, parseSpeaking, parseGrammar, parsePronunciation, topicsWithAll, filterByTopic};
+  return {fetchCSV, parseSpeaking, parseGrammar, parsePronunciation, parseVocabulary, topicsWithAll, filterByTopic};
 })();

@@ -2,7 +2,7 @@ window.UI = (function(){
   const el = (id)=>document.getElementById(id);
 
   function showScreen(name){
-    const screens = ["screenHome","screenSpeaking","screenGrammar","screenPronunciation"];
+    const screens = ["screenHome","screenSpeaking","screenGrammar","screenPronunciation","screenVocabulary"];
     for(const s of screens){
       const node = el(s);
       if(node) node.hidden = (s !== name);
@@ -27,12 +27,14 @@ window.UI = (function(){
       .replaceAll("&","&amp;").replaceAll("<","&lt;")
       .replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#39;");
+
   }
 
   function renderHero(home, counts){
     const totalSpeak = counts?.speaking?.["Tổng hợp"] ?? 0;
     const totalGram  = counts?.grammar?.["Tổng hợp"] ?? 0;
     const totalPron  = counts?.pronunciation?.["Tổng hợp"] ?? 0;
+    const totalVocab = counts?.vocabulary?.["Tổng hợp"] ?? 0;
 
     const hero = document.createElement("div");
     hero.className = "hero";
@@ -45,6 +47,7 @@ window.UI = (function(){
           <div class="chip">🖊️ Speaking <span class="chip-num">${totalSpeak}</span></div>
           <div class="chip">🧩 Grammar <span class="chip-num">${totalGram}</span></div>
           <div class="chip">🔊 Pronunciation <span class="chip-num">${totalPron}</span></div>
+          <div class="chip">📖 Vocabulary <span class="chip-num">${totalVocab}</span></div>
         </div>
 
         <div class="hero-note">Tip: Add to Home Screen on iPad/iPhone for an app-like experience.</div>
@@ -53,7 +56,7 @@ window.UI = (function(){
     home.appendChild(hero);
   }
 
-  function renderHome({speakingTopics, grammarTopics, pronunciationTopics = [], counts, onStartSpeaking, onStartGrammar, onStartPronunciation}){
+  function renderHome({speakingTopics, grammarTopics, pronunciationTopics = [], vocabularyTopics = [], counts, onStartSpeaking, onStartGrammar, onStartPronunciation, onStartVocabulary}){
     const home = el("screenHome");
     home.innerHTML = "";
 
@@ -155,7 +158,41 @@ window.UI = (function(){
       }
     }
 
-    // Enable tap-to-scroll navigation on the hero chips (Speaking / Grammar / Pronunciation)
+    // Vocabulary section (Fill blank)
+    if(vocabularyTopics && vocabularyTopics.length && typeof onStartVocabulary === "function"){
+      const vSection = document.createElement("div");
+      vSection.className = "section";
+      vSection.id = "secVocabulary";
+      vSection.innerHTML = `
+        <div class="section-head">
+          <div class="section-title">📖 Vocabulary (Fill blank)</div>
+          <div class="section-sub">Type the missing word → must be correct to continue</div>
+        </div>
+        <div class="grid" id="gridVocab"></div>
+      `;
+      home.appendChild(vSection);
+
+      const gridVocab = vSection.querySelector("#gridVocab");
+      for(const t of vocabularyTopics){
+        const c = counts.vocabulary?.[t] ?? 0;
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="card-top">
+            <div>
+              <div class="card-title">${escapeHtml(t)}</div>
+              <div class="card-count">${c} questions</div>
+            </div>
+            <div class="card-icon">📖</div>
+          </div>
+          <button class="btn teal">Start</button>
+        `;
+        card.querySelector("button").onclick = ()=>onStartVocabulary(t);
+        gridVocab.appendChild(card);
+      }
+    }
+
+    // Enable tap-to-scroll navigation on the hero chips (Speaking / Grammar / Pronunciation / Vocabulary)
     bindHeroNav();
   }
 
@@ -198,8 +235,8 @@ window.UI = (function(){
     const chips = home.querySelectorAll(".hero .chip");
     if(!chips || chips.length < 1) return;
 
-    // Map by order: Speaking, Grammar, Pronunciation
-    const map = ["secSpeaking","secGrammar","secPronunciation"];
+    // Map by order: Speaking, Grammar, Pronunciation, Vocabulary
+    const map = ["secSpeaking","secGrammar","secPronunciation","secVocabulary"];
     chips.forEach((chip, i)=>{
       const target = map[i];
       if(!target) return;

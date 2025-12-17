@@ -95,6 +95,7 @@ body{
   font-weight:800;
   padding:12px 14px;
   border-radius:14px;
+  cursor:pointer; /* NEW: pointer cursor */
 }
 .btn.blue{background:var(--blue)}
 .btn.purple{background:var(--purple)}
@@ -270,6 +271,15 @@ body{
 
 /* ===== Pronunciation additions ===== */
 .btn.green{background:#16a34a;}
+/* ===== Vocabulary additions ===== */
+.btn.teal{
+  background: #14b8a6;      /* teal-500 */
+  color: #ffffff;
+}
+.btn.teal:hover{
+  background: #0d9488;      /* teal-600 */
+}
+
 .opt-line{
   display:flex;
   align-items:center;
@@ -431,10 +441,6 @@ body{
   filter: saturate(1.1);
 }
 
-/* Add green button style if not present */
-.btn.green{background:#16a34a;}
-
-
 /* ===== FIX: iPhone/iPad header che nội dung (topbar overlap) ===== */
 /* Ý tưởng: iOS dùng .screen position:fixed (app-like). Vì topbar nằm “trên” nên cần chừa khoảng đệm đúng bằng chiều cao topbar. */
 
@@ -448,9 +454,6 @@ body{
 }
 
 /* Khi dùng chế độ app-like screens (mobile), .screen đã được “cắt vùng hiển thị” bằng top: var(--topbar-h) */
-
-
-
 
 /* Hero chips behave like navigation buttons */
 .chip:active{transform:scale(.98)}
