@@ -38,6 +38,22 @@ window.Vocabulary = (function(){
     return stripped !== n;
   }
 
+  // NEW: Speak the Sentence (do NOT reveal the Answer)
+  function speakSentence(sentence){
+    if(!window.TTS || typeof TTS.speak !== "function") return;
+    const s = (sentence ?? "").toString()
+      // Replace one or more underscores block with a spoken placeholder
+      .replace(/_{2,}/g, " blank ")
+      .trim();
+    if(!s) return;
+    try{
+      TTS.cancel?.();
+      TTS.speak(s);
+    }catch(_e){
+      // keep silent if TTS fails
+    }
+  }
+
   function setProgress(){
     const total = order.length;
     const done = Math.min(idx, total);
@@ -161,6 +177,10 @@ window.Vocabulary = (function(){
     UI.el("vcInput").value = "";
     UI.el("vcStatus").textContent = "Type the word and press Enter";
     renderFeedback("");
+
+    // NEW: Speak sentence on Start and on each new question
+    speakSentence(current?.sentence);
+
     focusInput();
   }
 
