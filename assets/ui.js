@@ -38,8 +38,8 @@ window.UI = (function(){
     hero.className = "hero";
     hero.innerHTML = `
       <div class="hero-inner">
-        <div class="hero-title">Do Nhat Minh’s English Practice</div>
-        <div class="hero-sub">A simple self-study website for primary students • Son La, Vietnam</div>
+        <div class="hero-title">Primary English Self-Study Website</div>
+        <div class="hero-sub">For Do Nhat Minh • Class SN3A • Ngoc Linh Primary School (2025)</div>
 
         <div class="hero-chips">
           <div class="chip">🖊️ Speaking <span class="chip-num">${totalSpeak}</span></div>
