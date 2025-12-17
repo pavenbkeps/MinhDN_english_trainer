@@ -154,6 +154,9 @@ window.UI = (function(){
         gridPron.appendChild(card);
       }
     }
+
+    // Enable tap-to-scroll navigation on the hero chips (Speaking / Grammar / Pronunciation)
+    bindHeroNav();
   }
 
   
@@ -210,9 +213,6 @@ window.UI = (function(){
         }
       };
     });
-    // Enable tap-to-scroll navigation on the hero chips
-    bindHeroNav();
-
   }
 
 return {showScreen, setLoading, renderHome, el};
