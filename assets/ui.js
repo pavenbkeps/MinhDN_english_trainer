@@ -169,10 +169,27 @@ window.UI = (function(){
       document.documentElement.style.setProperty("--topbar-h", h + "px");
     }
   }
-  window.addEventListener("load", updateTopbarHeight);
+
+  // iOS/Android mobile browsers đôi khi thay đổi viewport (thanh địa chỉ hiện/ẩn)
+  // mà không bắn resize chuẩn → lắng nghe thêm visualViewport nếu có.
+  const vv = window.visualViewport;
+  if(vv){
+    vv.addEventListener("resize", updateTopbarHeight);
+    vv.addEventListener("scroll", updateTopbarHeight);
+  }
+
+  window.addEventListener("load", ()=>{
+    // Đo ngay khi load
+    updateTopbarHeight();
+    // Và đo thêm vài nhịp để bắt trường hợp chữ wrap / font settle trên mobile
+    requestAnimationFrame(updateTopbarHeight);
+    setTimeout(updateTopbarHeight, 50);
+    setTimeout(updateTopbarHeight, 200);
+  });
+
   window.addEventListener("resize", updateTopbarHeight);
   window.addEventListener("orientationchange", updateTopbarHeight);
 
-  // Nếu trang đã load xong mà script chạy sau, gọi luôn 1 lần
+  // Nếu script chạy sau khi trang đã load, gọi luôn 1 lần
   updateTopbarHeight();
 })();
