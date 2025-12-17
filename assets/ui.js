@@ -62,6 +62,7 @@ window.UI = (function(){
 
     const speakingSection = document.createElement("div");
     speakingSection.className = "section";
+    speakingSection.id = "secSpeaking";
     speakingSection.innerHTML = `
       <div class="section-head">
         <div class="section-title">🖊️ Speaking</div>
@@ -92,6 +93,7 @@ window.UI = (function(){
 
     const grammarSection = document.createElement("div");
     grammarSection.className = "section";
+    grammarSection.id = "secGrammar";
     grammarSection.innerHTML = `
       <div class="section-head">
         <div class="section-title">🧩 Grammar (MCQ)</div>
@@ -123,6 +125,7 @@ window.UI = (function(){
     if(pronunciationTopics && pronunciationTopics.length && typeof onStartPronunciation === "function"){
       const prSection = document.createElement("div");
       prSection.className = "section";
+      prSection.id = "secPronunciation";
       prSection.innerHTML = `
         <div class="section-head">
           <div class="section-title">🔊 Pronunciation</div>
@@ -153,7 +156,66 @@ window.UI = (function(){
     }
   }
 
-  return {showScreen, setLoading, renderHome, el};
+  
+  function getTopbarH(){
+    // Prefer CSS var set by JS (--topbar-h), fallback to real element height
+    const v = getComputedStyle(document.documentElement).getPropertyValue("--topbar-h");
+    const n = parseFloat(v);
+    if(Number.isFinite(n) && n > 0) return n;
+    const tb = document.querySelector(".topbar");
+    return tb ? tb.offsetHeight : 0;
+  }
+
+  function scrollToSection(sectionId){
+    const home = el("screenHome");
+    const target = document.getElementById(sectionId);
+    if(!target) return;
+
+    const offset = getTopbarH() + 10; // small breathing room under topbar
+
+    // If screenHome is the scrolling container (mobile app-like mode), scroll it.
+    if(home){
+      const st = getComputedStyle(home);
+      const isScrollable = (home.scrollHeight - home.clientHeight > 5) && (st.overflowY === "auto" || st.overflowY === "scroll");
+      if(isScrollable){
+        const top = target.getBoundingClientRect().top - home.getBoundingClientRect().top + home.scrollTop;
+        home.scrollTo({ top: Math.max(0, top - offset), behavior: "smooth" });
+        return;
+      }
+    }
+
+    // Fallback: scroll the page (desktop)
+    const top = target.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: Math.max(0, top - offset), behavior: "smooth" });
+  }
+
+  function bindHeroNav(){
+    const home = el("screenHome");
+    if(!home) return;
+    const chips = home.querySelectorAll(".hero .chip");
+    if(!chips || chips.length < 1) return;
+
+    // Map by order: Speaking, Grammar, Pronunciation
+    const map = ["secSpeaking","secGrammar","secPronunciation"];
+    chips.forEach((chip, i)=>{
+      const target = map[i];
+      if(!target) return;
+      chip.setAttribute("role","button");
+      chip.setAttribute("tabindex","0");
+      chip.onclick = ()=>scrollToSection(target);
+      chip.onkeydown = (e)=>{
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          scrollToSection(target);
+        }
+      };
+    });
+    // Enable tap-to-scroll navigation on the hero chips
+    bindHeroNav();
+
+  }
+
+return {showScreen, setLoading, renderHome, el};
 })();
 
 

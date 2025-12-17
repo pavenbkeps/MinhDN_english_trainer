@@ -399,6 +399,8 @@ body{
   margin-top: 12px;
 }
 .chip{
+  cursor: pointer;
+  user-select: none;
   display:flex;
   align-items:center;
   gap:8px;
@@ -448,3 +450,7 @@ body{
 /* Khi dùng chế độ app-like screens (mobile), .screen đã được “cắt vùng hiển thị” bằng top: var(--topbar-h) */
 
 
+
+
+/* Hero chips behave like navigation buttons */
+.chip:active{transform:scale(.98)}
