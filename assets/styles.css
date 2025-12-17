@@ -428,3 +428,23 @@ body{
 
 /* Add green button style if not present */
 .btn.green{background:#16a34a;}
+
+
+/* ===== FIX: iPhone/iPad header che nội dung (topbar overlap) ===== */
+/* Ý tưởng: iOS dùng .screen position:fixed (app-like). Vì topbar nằm “trên” nên cần chừa khoảng đệm đúng bằng chiều cao topbar. */
+
+:root{
+  --topbar-h: 72px; /* JS sẽ tự đo và cập nhật */
+}
+
+/* Safe-area cho topbar trên iPhone/iPad (tai thỏ) */
+.topbar{
+  padding-top: calc(10px + env(safe-area-inset-top));
+}
+
+/* Khi dùng chế độ app-like screens (mobile), chừa chỗ cho topbar để không che câu hỏi/đáp án */
+@media (max-width: 820px){
+  .screen{
+    padding-top: var(--topbar-h);
+  }
+}

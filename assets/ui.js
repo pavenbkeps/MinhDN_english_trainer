@@ -25,7 +25,8 @@ window.UI = (function(){
   function escapeHtml(str){
     return (str??"").toString()
       .replaceAll("&","&amp;").replaceAll("<","&lt;")
-      .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#39;");
   }
 
   function renderHero(home, counts){
@@ -153,4 +154,25 @@ window.UI = (function(){
   }
 
   return {showScreen, setLoading, renderHome, el};
+})();
+
+
+// ===== FIX: iPhone/iPad header che nội dung (topbar overlap) =====
+// iOS Safari + chế độ ".screen { position: fixed; }" có thể làm topbar đè lên nội dung.
+// Giải pháp: đo chiều cao .topbar và set CSS var --topbar-h để .screen tự chừa khoảng trống.
+(function(){
+  function updateTopbarHeight(){
+    const topbar = document.querySelector(".topbar");
+    if(!topbar) return;
+    const h = topbar.offsetHeight || 0;
+    if(h>0){
+      document.documentElement.style.setProperty("--topbar-h", h + "px");
+    }
+  }
+  window.addEventListener("load", updateTopbarHeight);
+  window.addEventListener("resize", updateTopbarHeight);
+  window.addEventListener("orientationchange", updateTopbarHeight);
+
+  // Nếu trang đã load xong mà script chạy sau, gọi luôn 1 lần
+  updateTopbarHeight();
 })();
