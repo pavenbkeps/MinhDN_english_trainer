@@ -14,7 +14,7 @@ window.Reading = (function(){
   let si = 0;                 // sentence index
   let playing = false;        // currently speaking (auto-next enabled)
   let paused = false;         // speechSynthesis paused flag
-  let autoMode = true;        // Play = auto next; Prev/Next = manual (read once)
+  let autoMode = true;        // Play = auto next; Prev/Next/Click = manual (read once)
   let repeatMode = false;     // repeat current sentence at end (toggle)
   let rate = 0.95;
 
@@ -187,7 +187,8 @@ window.Reading = (function(){
       .rd-sent{
         padding:8px 10px;border-radius:14px;
         transition: background .15s ease;
-        font-weight: 500; /* NOT bold */
+        font-weight: 400; /* NORMAL (no bold) */
+        background: transparent; /* default no highlight */
       }
       .rd-sent:hover{background: rgba(255,255,255,.06)}
       .rd-sent.active{background: rgba(59,130,246,.16); border:1px solid rgba(59,130,246,.35)}
@@ -287,18 +288,34 @@ window.Reading = (function(){
     };
 
     u.onboundary = (e)=>{
-      // Word boundary support varies; we do "prefix highlight" when charIndex is provided.
-      const charIndex = (typeof e.charIndex === "number") ? e.charIndex : -1;
-      if(charIndex <= 0) return;
+      // Boundary support varies; charIndex is usually "start of current/next word".
+      // We extend highlight to the end of the current word (and trailing punctuation),
+      // so the last word also gets highlighted.
+      const i0 = (typeof e.charIndex === "number") ? e.charIndex : -1;
+      if(i0 < 0) return;
+
       const full = sentences[index];
-      const pre = full.slice(0, Math.min(charIndex, full.length));
-      const rest = full.slice(Math.min(charIndex, full.length));
+      let end = Math.min(i0, full.length);
+
+      // Extend to end of the word (until space/newline)
+      while(end < full.length && full[end] !== " " && full[end] !== "\n") end++;
+
+      // Include trailing punctuation right after the word
+      while(end < full.length && /[.,!?;:")\]]/.test(full[end])) end++;
+
+      const pre = full.slice(0, end);
+      const rest = full.slice(end);
+
       const n = el("rdSent_" + index);
       if(!n) return;
       n.innerHTML = `<span class="rd-prefix">${escapeHtml(pre)}</span>${escapeHtml(rest)}`;
     };
 
     u.onend = ()=>{
+      // Ensure full sentence is highlighted (fix "last word not highlighted")
+      const n = el("rdSent_" + index);
+      if(n) n.innerHTML = `<span class="rd-prefix">${escapeHtml(sentences[index])}</span>`;
+
       currentUtterance = null;
 
       // manual mode: stop after one sentence
@@ -422,7 +439,7 @@ window.Reading = (function(){
 
         <div class="rd-toolbar">
           <div class="rd-group">
-            <button class="rd-ibtn" id="rdPlay" title="Play (auto next)">▶</button>
+            <button class="rd-ibtn" id="rdPlay" title="Play (auto next / resume if paused)">▶</button>
             <button class="rd-ibtn" id="rdPause" title="Pause">⏸</button>
             <button class="rd-ibtn" id="rdStop" title="Stop (back to first sentence)">⏹</button>
           </div>
