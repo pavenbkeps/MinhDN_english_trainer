@@ -505,9 +505,36 @@ window.Reading = (function(){
     const rateEl = el("rdRate");
     rateEl.value = rate.toFixed(2);
     el("rdRateVal").textContent = rate.toFixed(2) + "x";
+    // rateEl.oninput = ()=>{
+    //   rate = parseFloat(rateEl.value) || 0.95;
+    //   el("rdRateVal").textContent = rate.toFixed(2) + "x";
+    // };
     rateEl.oninput = ()=>{
       rate = parseFloat(rateEl.value) || 0.95;
       el("rdRateVal").textContent = rate.toFixed(2) + "x";
+
+      // Apply immediately on desktop engines by restarting the current sentence
+      if(window.speechSynthesis){
+        const isSpeaking = window.speechSynthesis.speaking;
+        const isPaused   = window.speechSynthesis.paused;
+
+        if(isSpeaking || isPaused){
+          // keep mode as-is
+          const wasAuto = autoMode;
+          const wasPlaying = playing;
+
+          ttsCancel();         // cancel current utterance
+          paused = false;
+
+          // restart current sentence with new rate
+          // if it was manual, it will still stop after one sentence
+          // if it was auto+playing, it will continue auto-next
+          autoMode = wasAuto;
+          playing = wasPlaying;
+
+          speakSentence(si);
+        }
+      }
     };
 
     // Buttons
