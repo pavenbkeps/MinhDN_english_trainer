@@ -5,6 +5,42 @@ window.Data = (function(){
   function stripQuotes(s){
     return (s ?? "").replace(/^"(.*)"$/s, "$1").replace(/""/g, '"').trim();
   }
+
+  // NEW: split CSV into logical rows, preserving embedded newlines inside quoted cells
+  function splitCSVRows(csvText){
+    const rows = [];
+    let cur = "";
+    let inQuotes = false;
+
+    for(let i=0;i<csvText.length;i++){
+      const ch = csvText[i];
+
+      if(ch === '"'){
+        // Escaped quote inside a quoted field: "" -> "
+        if(inQuotes && csvText[i+1] === '"'){
+          cur += '"';
+          i++;
+          continue;
+        }
+        inQuotes = !inQuotes;
+        cur += ch;
+        continue;
+      }
+
+      if(!inQuotes && (ch === '\n' || ch === '\r')){
+        // Handle CRLF
+        if(ch === '\r' && csvText[i+1] === '\n') i++;
+        if(cur.trim() !== "") rows.push(cur);
+        cur = "";
+        continue;
+      }
+
+      cur += ch;
+    }
+    if(cur.trim() !== "") rows.push(cur);
+    return rows;
+  }
+
   async function fetchCSV(url){
     const r = await fetch(url, {cache:"no-store"});
     if(!r.ok) throw new Error("Fetch failed: "+r.status);
@@ -127,7 +163,7 @@ window.Data = (function(){
     }
     return items;
   }
-  
+
   function parseVocabulary(csvText){
     const rows = csvText.split(/\r?\n/).filter(Boolean);
     let start = 0;
@@ -152,6 +188,40 @@ window.Data = (function(){
     return items;
   }
 
+  // Reading / Speech
+  // Expected columns: Topic,Title,Lang,Text,Note_vi,NewWords
+  function parseReading(csvText){
+    const rows = splitCSVRows(csvText);
+    let start = 0;
+    if(rows[0] && rows[0].toLowerCase().includes("topic")) start = 1;
+
+    const items = [];
+    for(let i=start;i<rows.length;i++){
+      const cols = smartSplitCSVLine(rows[i]);
+      if(cols.length < 4) continue;
+
+      const topic = stripQuotes(cols[0]);
+      const title = stripQuotes(cols[1]);
+      const lang = stripQuotes(cols[2]) || "en";
+      const text = stripQuotes(cols[3]);
+
+      const note_vi = stripQuotes(cols[4] || "");
+      const newWords = stripQuotes(cols[5] || "");
+
+      if(!topic || !title || !text) continue;
+
+      items.push({
+        topic,
+        title,
+        lang,
+        text,
+        note_vi,
+        newWords
+      });
+    }
+    return items;
+  }
+
   function topicsWithAll(items){
     const topics = Array.from(new Set(items.map(x=>x.topic).filter(Boolean)));
     return ["Tổng hợp", ...topics.filter(t=>t!=="Tổng hợp")];
@@ -162,5 +232,5 @@ window.Data = (function(){
     return items.filter(x=>x.topic === topic);
   }
 
-  return {fetchCSV, parseSpeaking, parseGrammar, parsePronunciation, parseVocabulary, topicsWithAll, filterByTopic};
+  return {fetchCSV, parseSpeaking, parseGrammar, parsePronunciation, parseVocabulary, parseReading, topicsWithAll, filterByTopic};
 })();

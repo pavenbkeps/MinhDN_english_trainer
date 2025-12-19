@@ -2,7 +2,7 @@ window.UI = (function(){
   const el = (id)=>document.getElementById(id);
 
   function showScreen(name){
-    const screens = ["screenHome","screenSpeaking","screenGrammar","screenPronunciation","screenVocabulary"];
+    const screens = ["screenHome","screenSpeaking","screenGrammar","screenPronunciation","screenVocabulary","screenReading"];
     for(const s of screens){
       const node = el(s);
       if(node) node.hidden = (s !== name);
@@ -27,7 +27,6 @@ window.UI = (function(){
       .replaceAll("&","&amp;").replaceAll("<","&lt;")
       .replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#39;");
-
   }
 
   function renderHero(home, counts){
@@ -35,6 +34,7 @@ window.UI = (function(){
     const totalGram  = counts?.grammar?.["Tổng hợp"] ?? 0;
     const totalPron  = counts?.pronunciation?.["Tổng hợp"] ?? 0;
     const totalVocab = counts?.vocabulary?.["Tổng hợp"] ?? 0;
+    const totalReading = counts?.reading?.["Tổng hợp"] ?? 0;
 
     const hero = document.createElement("div");
     hero.className = "hero";
@@ -48,6 +48,7 @@ window.UI = (function(){
           <div class="chip">🧩 Grammar <span class="chip-num">${totalGram}</span></div>
           <div class="chip">🔊 Pronunciation <span class="chip-num">${totalPron}</span></div>
           <div class="chip">📖 Vocabulary <span class="chip-num">${totalVocab}</span></div>
+          <div class="chip">📘 Reading <span class="chip-num">${totalReading}</span></div>
         </div>
 
         <div class="hero-note">Tip: Add to Home Screen on iPad/iPhone for an app-like experience.</div>
@@ -56,13 +57,25 @@ window.UI = (function(){
     home.appendChild(hero);
   }
 
-  function renderHome({speakingTopics, grammarTopics, pronunciationTopics = [], vocabularyTopics = [], counts, onStartSpeaking, onStartGrammar, onStartPronunciation, onStartVocabulary}){
+  function renderHome({
+    speakingTopics,
+    grammarTopics,
+    pronunciationTopics = [],
+    vocabularyTopics = [],
+    readingTopics = [],
+    counts,
+    onStartSpeaking,
+    onStartGrammar,
+    onStartPronunciation,
+    onStartVocabulary,
+    onStartReading
+  }){
     const home = el("screenHome");
     home.innerHTML = "";
 
-    // NEW: Hero intro
     renderHero(home, counts);
 
+    /* ===== Speaking ===== */
     const speakingSection = document.createElement("div");
     speakingSection.className = "section";
     speakingSection.id = "secSpeaking";
@@ -94,6 +107,7 @@ window.UI = (function(){
       gridSpeaking.appendChild(card);
     }
 
+    /* ===== Grammar ===== */
     const grammarSection = document.createElement("div");
     grammarSection.className = "section";
     grammarSection.id = "secGrammar";
@@ -125,6 +139,7 @@ window.UI = (function(){
       gridGrammar.appendChild(card);
     }
 
+    /* ===== Pronunciation ===== */
     if(pronunciationTopics && pronunciationTopics.length && typeof onStartPronunciation === "function"){
       const prSection = document.createElement("div");
       prSection.className = "section";
@@ -158,7 +173,7 @@ window.UI = (function(){
       }
     }
 
-    // Vocabulary section (Fill blank)
+    /* ===== Vocabulary ===== */
     if(vocabularyTopics && vocabularyTopics.length && typeof onStartVocabulary === "function"){
       const vSection = document.createElement("div");
       vSection.className = "section";
@@ -192,13 +207,44 @@ window.UI = (function(){
       }
     }
 
-    // Enable tap-to-scroll navigation on the hero chips (Speaking / Grammar / Pronunciation / Vocabulary)
+    /* ===== Reading / Speech ===== */
+    if(readingTopics && readingTopics.length && typeof onStartReading === "function"){
+      const rSection = document.createElement("div");
+      rSection.className = "section";
+      rSection.id = "secReading";
+      rSection.innerHTML = `
+        <div class="section-head">
+          <div class="section-title">📘 Reading / Speech</div>
+          <div class="section-sub">Listen → follow → speak confidently</div>
+        </div>
+        <div class="grid" id="gridReading"></div>
+      `;
+      home.appendChild(rSection);
+
+      const gridReading = rSection.querySelector("#gridReading");
+      for(const t of readingTopics){
+        const c = counts.reading?.[t] ?? 0;
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="card-top">
+            <div>
+              <div class="card-title">${escapeHtml(t)}</div>
+              <div class="card-count">${c} bài</div>
+            </div>
+            <div class="card-icon">📘</div>
+          </div>
+          <button class="btn blue">Start</button>
+        `;
+        card.querySelector("button").onclick = ()=>onStartReading(t);
+        gridReading.appendChild(card);
+      }
+    }
+
     bindHeroNav();
   }
 
-  
   function getTopbarH(){
-    // Prefer CSS var set by JS (--topbar-h), fallback to real element height
     const v = getComputedStyle(document.documentElement).getPropertyValue("--topbar-h");
     const n = parseFloat(v);
     if(Number.isFinite(n) && n > 0) return n;
@@ -211,9 +257,8 @@ window.UI = (function(){
     const target = document.getElementById(sectionId);
     if(!target) return;
 
-    const offset = getTopbarH() + 10; // small breathing room under topbar
+    const offset = getTopbarH() + 10;
 
-    // If screenHome is the scrolling container (mobile app-like mode), scroll it.
     if(home){
       const st = getComputedStyle(home);
       const isScrollable = (home.scrollHeight - home.clientHeight > 5) && (st.overflowY === "auto" || st.overflowY === "scroll");
@@ -224,7 +269,6 @@ window.UI = (function(){
       }
     }
 
-    // Fallback: scroll the page (desktop)
     const top = target.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({ top: Math.max(0, top - offset), behavior: "smooth" });
   }
@@ -235,8 +279,7 @@ window.UI = (function(){
     const chips = home.querySelectorAll(".hero .chip");
     if(!chips || chips.length < 1) return;
 
-    // Map by order: Speaking, Grammar, Pronunciation, Vocabulary
-    const map = ["secSpeaking","secGrammar","secPronunciation","secVocabulary"];
+    const map = ["secSpeaking","secGrammar","secPronunciation","secVocabulary","secReading"];
     chips.forEach((chip, i)=>{
       const target = map[i];
       if(!target) return;
@@ -252,43 +295,5 @@ window.UI = (function(){
     });
   }
 
-return {showScreen, setLoading, renderHome, el};
-})();
-
-
-// ===== FIX: iPhone/iPad header che nội dung (topbar overlap) =====
-// iOS Safari + chế độ ".screen { position: fixed; }" có thể làm topbar đè lên nội dung.
-// Giải pháp: đo chiều cao .topbar và set CSS var --topbar-h để .screen tự chừa khoảng trống.
-(function(){
-  function updateTopbarHeight(){
-    const topbar = document.querySelector(".topbar");
-    if(!topbar) return;
-    const h = topbar.offsetHeight || 0;
-    if(h>0){
-      document.documentElement.style.setProperty("--topbar-h", h + "px");
-    }
-  }
-
-  // iOS/Android mobile browsers đôi khi thay đổi viewport (thanh địa chỉ hiện/ẩn)
-  // mà không bắn resize chuẩn → lắng nghe thêm visualViewport nếu có.
-  const vv = window.visualViewport;
-  if(vv){
-    vv.addEventListener("resize", updateTopbarHeight);
-    vv.addEventListener("scroll", updateTopbarHeight);
-  }
-
-  window.addEventListener("load", ()=>{
-    // Đo ngay khi load
-    updateTopbarHeight();
-    // Và đo thêm vài nhịp để bắt trường hợp chữ wrap / font settle trên mobile
-    requestAnimationFrame(updateTopbarHeight);
-    setTimeout(updateTopbarHeight, 50);
-    setTimeout(updateTopbarHeight, 200);
-  });
-
-  window.addEventListener("resize", updateTopbarHeight);
-  window.addEventListener("orientationchange", updateTopbarHeight);
-
-  // Nếu script chạy sau khi trang đã load, gọi luôn 1 lần
-  updateTopbarHeight();
+  return {showScreen, setLoading, renderHome, el};
 })();
