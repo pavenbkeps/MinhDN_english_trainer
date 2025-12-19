@@ -505,10 +505,6 @@ window.Reading = (function(){
     const rateEl = el("rdRate");
     rateEl.value = rate.toFixed(2);
     el("rdRateVal").textContent = rate.toFixed(2) + "x";
-    // rateEl.oninput = ()=>{
-    //   rate = parseFloat(rateEl.value) || 0.95;
-    //   el("rdRateVal").textContent = rate.toFixed(2) + "x";
-    // };
     rateEl.oninput = ()=>{
       rate = parseFloat(rateEl.value) || 0.95;
       el("rdRateVal").textContent = rate.toFixed(2) + "x";
