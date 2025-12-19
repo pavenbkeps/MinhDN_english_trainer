@@ -254,9 +254,15 @@ window.Vocabulary = (function(){
         </div>
 
         <div class="quiz-body">
-          <div class="qbox">
-            <div id="vcSentence" class="q"></div>
-            <div id="vcLen" class="muted" style="margin-top:6px"></div>
+          <div class="qbox" style="padding:14px; border-radius:16px; border:1px solid var(--border); background: rgba(255,255,255,.05);">
+            <div id="vcSentence" class="q"
+              style="
+                font-size: clamp(22px, 3.2vw, 30px);
+                line-height: 1.45;
+                font-weight: 800;
+                letter-spacing: .2px;
+              "></div>
+            <div id="vcLen" class="muted" style="margin-top:8px"></div>
           </div>
 
           <div style="margin-top:10px">
