@@ -295,5 +295,27 @@ window.UI = (function(){
     });
   }
 
+  // ✅ NEW: Make topbar brand (logo + title) behave like Home button
+  // This is the safest approach: it triggers existing #btnHome behavior (no logic duplication)
+  function bindTopbarBrandHome(){
+    const brand = document.getElementById("topbarBrand") || document.querySelector(".topbar .brand");
+    const btnHome = document.getElementById("btnHome");
+    if(!brand || !btnHome) return;
+
+    brand.style.cursor = "pointer";
+    brand.addEventListener("click", ()=> btnHome.click());
+
+    // keyboard friendly
+    brand.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        btnHome.click();
+      }
+    });
+  }
+
+  // scripts are loaded at end of body, so DOM is ready here
+  bindTopbarBrandHome();
+
   return {showScreen, setLoading, renderHome, el};
 })();
