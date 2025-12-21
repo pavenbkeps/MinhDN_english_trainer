@@ -5,6 +5,58 @@
   let vocabularyData = [];
   let readingData = [];
 
+  // ===== History navigation (minimal hook) =====
+  const VALID_SCREENS = new Set([
+    "screenHome",
+    "screenSpeaking",
+    "screenGrammar",
+    "screenPronunciation",
+    "screenVocabulary",
+    "screenReading"
+  ]);
+
+  function normalizeScreen(s){
+    if(!s) return "screenHome";
+    const v = String(s);
+    return VALID_SCREENS.has(v) ? v : "screenHome";
+  }
+
+  function nav(screen, opts = {}){
+    // opts: { silent: boolean, replace: boolean }
+    const target = normalizeScreen(screen);
+
+    // keep existing behavior
+    UI.showScreen(target);
+
+    // update history unless silent
+    if(opts.silent) return;
+
+    const url = `#${target}`;
+    const state = { screen: target };
+
+    try{
+      if(opts.replace){
+        history.replaceState(state, "", url);
+      }else{
+        history.pushState(state, "", url);
+      }
+    }catch(e){
+      // Fallback: hash only (shouldn't break app)
+      try{ location.hash = url; }catch(_){}
+    }
+  }
+
+  // Handle browser Back/Forward
+  window.addEventListener("popstate", (e)=>{
+    // ⬅️ THÊM DÒNG NÀY
+    TTS.cancel();
+
+    const sFromState = e && e.state && e.state.screen;
+    const sFromHash = (location.hash || "").replace("#", "");
+    const target = normalizeScreen(sFromState || sFromHash || "screenHome");
+    nav(target, { silent: true });
+  });
+
   function countByTopic(items){
     const topics = Data.topicsWithAll(items);
     const m = {};
@@ -50,7 +102,9 @@
     };
 
     UI.setLoading(false);
-    UI.showScreen("screenHome");
+
+    // Always land on Home after data loaded (and set initial history entry)
+    nav("screenHome", { replace: true });
 
     UI.renderHome({
       speakingTopics,
@@ -62,27 +116,27 @@
 
       onStartSpeaking: (topic)=>{
         const items = Data.filterByTopic(speakingData, topic);
-        UI.showScreen("screenSpeaking");
+        nav("screenSpeaking");
         Speaking.start(items, topic);
       },
       onStartGrammar: (topic)=>{
         const items = Data.filterByTopic(grammarData, topic);
-        UI.showScreen("screenGrammar");
+        nav("screenGrammar");
         Grammar.start(items, topic);
       },
       onStartPronunciation: (topic)=>{
         const items = Data.filterByTopic(pronunciationData, topic);
-        UI.showScreen("screenPronunciation");
+        nav("screenPronunciation");
         Pronunciation.start(items, topic);
       },
       onStartVocabulary: (topic)=>{
         const items = Data.filterByTopic(vocabularyData, topic);
-        UI.showScreen("screenVocabulary");
+        nav("screenVocabulary");
         Vocabulary.start(items, topic);
       },
       onStartReading: (topic)=>{
         const items = Data.filterByTopic(readingData, topic);
-        UI.showScreen("screenReading");
+        nav("screenReading");
         Reading.start(items, topic);
       }
     });
@@ -90,7 +144,7 @@
 
   document.getElementById("btnHome").onclick = ()=>{
     TTS.cancel();
-    UI.showScreen("screenHome");
+    nav("screenHome");
     init();
   };
   document.getElementById("btnStop").onclick = ()=> TTS.cancel();
