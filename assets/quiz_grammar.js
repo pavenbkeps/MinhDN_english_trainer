@@ -4,10 +4,12 @@ window.Grammar = (function(){
   let idx = 0;
   let correctCount = 0;
   let current = null;
+
+  // "locked" = đã trả lời câu hiện tại hay chưa
   let locked = false;
   let title = "";
 
-  // NEW: store wrong questions for "retry wrong" after finish
+  // store wrong questions for "retry wrong" after finish
   let wrongItems = [];
 
   function shuffle(arr){
@@ -27,7 +29,7 @@ window.Grammar = (function(){
     locked = false;
     title = topicTitle;
 
-    // NEW: reset wrong set each run
+    // reset wrong set each run
     wrongItems = [];
 
     const root = UI.el("screenGrammar");
@@ -51,8 +53,17 @@ window.Grammar = (function(){
         </div>
       </div>
     `;
+
     UI.el("grTitle").textContent = topicTitle;
-    UI.el("grNext").onclick = ()=> next(true);
+
+    // ✅ (YÊU CẦU 1) Chỉ cho Next khi đã chọn đáp án
+    const nextBtn = UI.el("grNext");
+    nextBtn.disabled = true;
+    nextBtn.onclick = () => {
+      // chặn an toàn: chưa chọn thì không cho đi tiếp
+      if(!locked) return;
+      next(true);
+    };
 
     TTS.warmUp();
     next(true);
@@ -70,11 +81,33 @@ window.Grammar = (function(){
       .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
   }
 
+  // ✅ (YÊU CẦU 2) Tạo câu đã trám đáp án vào chỗ trống
+  function filledSentence(question, fillWord){
+    const q = (question || "").toString();
+
+    // các dạng blank phổ biến: ___, __, ____
+    const reBlank = /_{2,}/g;
+    if(reBlank.test(q)){
+      // thay toàn bộ cụm gạch dưới bằng đáp án
+      return q.replace(reBlank, fillWord);
+    }
+
+    // Nếu không có blank, fallback: đọc nguyên câu (KHÔNG đọc đáp án ở cuối)
+    return q;
+  }
+
   function renderCurrent(){
     UI.el("grQ").textContent = current.question;
+
     const opts = UI.el("grOpts");
     opts.innerHTML = "";
+
+    // câu mới => chưa trả lời
     locked = false;
+
+    // ✅ (YÊU CẦU 1) reset Next về trạng thái disabled
+    const nextBtn = UI.el("grNext");
+    nextBtn.disabled = true;
 
     const explain = UI.el("grExplain");
     explain.hidden = true;
@@ -99,7 +132,10 @@ window.Grammar = (function(){
   }
 
   function choose(k, btn){
+    // đã trả lời rồi thì bỏ qua
     if(locked) return;
+
+    // đánh dấu đã trả lời
     locked = true;
 
     const buttons = Array.from(UI.el("grOpts").querySelectorAll(".opt"));
@@ -116,7 +152,7 @@ window.Grammar = (function(){
     }else{
       btn.classList.add("wrong");
 
-      // NEW: remember wrong question (avoid duplicates by question text)
+      // remember wrong question (avoid duplicates by question text)
       const exists = wrongItems.some(x => (x.question || "") === (current.question || ""));
       if(!exists) wrongItems.push(current);
     }
@@ -125,15 +161,40 @@ window.Grammar = (function(){
     explain.hidden = false;
     explain.innerHTML = `<strong>Vì sao?</strong><br>${escapeHtml(current.explain || "")}`;
 
+    // ✅ enable Next sau khi đã chọn
+    UI.el("grNext").disabled = false;
+
+    // ✅ (YÊU CẦU 2) TTS đọc câu đã trám đáp án đúng vào blank
     const correctObj = ({A:current.A,B:current.B,C:current.C,D:current.D})[correctKey] || "";
-    TTS.speak(`${current.question} ${correctObj}`);
+    const toSpeak = filledSentence(current.question, correctObj);
+    TTS.speak(toSpeak);
+
     setProgress();
+  }
+
+  // ✅ helper: quay về Home (không phá flow hiện tại)
+  function goHomeSafe(){
+    // Ưu tiên: bấm nút Home nếu trang có sẵn
+    const btn = document.getElementById("btnHome");
+    if(btn && typeof btn.click === "function"){
+      btn.click();
+      return;
+    }
+    // Fallback: nếu UI có hàm showScreen
+    if(window.UI && typeof UI.showScreen === "function"){
+      UI.showScreen("screenHome");
+      return;
+    }
+    // Fallback cuối: reload (rất hiếm khi cần)
+    // location.reload();
   }
 
   function finishScreen(){
     const root = UI.el("screenGrammar");
     const hasWrong = wrongItems.length > 0;
 
+    // ✅ (YÊU CẦU 3) Nếu đúng hết: không hiện Restart kiểu “làm lại câu đã đúng”
+    // => hiển thị rõ: "Làm lại tất cả" và "Về trang chủ"
     root.innerHTML = `
       <div class="quiz-wrap">
         <div class="finish">
@@ -143,7 +204,8 @@ window.Grammar = (function(){
         </div>
         <div class="nextbar">
           ${hasWrong ? `<button class="next" id="grRetryWrong">Làm lại câu sai</button>` : ``}
-          <button class="next" id="grRestart">Restart</button>
+          <button class="next" id="grRestartAll">Làm lại tất cả</button>
+          <button class="next" id="grGoHome">Về trang chủ</button>
         </div>
       </div>
     `;
@@ -151,7 +213,8 @@ window.Grammar = (function(){
     if(hasWrong){
       UI.el("grRetryWrong").onclick = ()=> start(wrongItems, `${title} — Câu sai`);
     }
-    UI.el("grRestart").onclick = ()=> start(items, title);
+    UI.el("grRestartAll").onclick = ()=> start(items, title);
+    UI.el("grGoHome").onclick = ()=> goHomeSafe();
   }
 
   function next(autoSpeak){
