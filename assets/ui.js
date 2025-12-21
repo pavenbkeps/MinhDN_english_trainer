@@ -2,7 +2,8 @@ window.UI = (function(){
   const el = (id)=>document.getElementById(id);
 
   function showScreen(name){
-    const screens = ["screenHome","screenSpeaking","screenGrammar","screenPronunciation","screenVocabulary","screenReading"];
+    // ✅ Add screenBedtime to the list (doesn't affect existing screens)
+    const screens = ["screenHome","screenSpeaking","screenGrammar","screenPronunciation","screenVocabulary","screenReading","screenBedtime"];
     for(const s of screens){
       const node = el(s);
       if(node) node.hidden = (s !== name);
@@ -36,6 +37,9 @@ window.UI = (function(){
     const totalVocab = counts?.vocabulary?.["Tổng hợp"] ?? 0;
     const totalReading = counts?.reading?.["Tổng hợp"] ?? 0;
 
+    // ✅ NEW: Bedtime total
+    const totalBedtime = counts?.bedtime?.["Tổng hợp"] ?? 0;
+
     const hero = document.createElement("div");
     hero.className = "hero";
     hero.innerHTML = `
@@ -49,6 +53,7 @@ window.UI = (function(){
           <div class="chip">🔊 Pronunciation <span class="chip-num">${totalPron}</span></div>
           <div class="chip">📖 Vocabulary <span class="chip-num">${totalVocab}</span></div>
           <div class="chip">📘 Reading <span class="chip-num">${totalReading}</span></div>
+          <div class="chip">🌙 Bedtime <span class="chip-num">${totalBedtime}</span></div>
         </div>
 
         <div class="hero-note">Tip: Add to Home Screen on iPad/iPhone for an app-like experience.</div>
@@ -63,12 +68,14 @@ window.UI = (function(){
     pronunciationTopics = [],
     vocabularyTopics = [],
     readingTopics = [],
+    bedtimeTopics = [],              // ✅ NEW
     counts,
     onStartSpeaking,
     onStartGrammar,
     onStartPronunciation,
     onStartVocabulary,
-    onStartReading
+    onStartReading,
+    onStartBedtime                 // ✅ NEW
   }){
     const home = el("screenHome");
     home.innerHTML = "";
@@ -241,6 +248,40 @@ window.UI = (function(){
       }
     }
 
+    /* ===== Bedtime / Story (NEW) ===== */
+    if(bedtimeTopics && bedtimeTopics.length && typeof onStartBedtime === "function"){
+      const bSection = document.createElement("div");
+      bSection.className = "section";
+      bSection.id = "secBedtime";
+      bSection.innerHTML = `
+        <div class="section-head">
+          <div class="section-title">🌙 Bedtime (Bilingual Stories)</div>
+          <div class="section-sub">Listen EN → VI • Relax and enjoy before sleep</div>
+        </div>
+        <div class="grid" id="gridBedtime"></div>
+      `;
+      home.appendChild(bSection);
+
+      const gridBed = bSection.querySelector("#gridBedtime");
+      for(const t of bedtimeTopics){
+        const c = counts.bedtime?.[t] ?? 0;
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="card-top">
+            <div>
+              <div class="card-title">${escapeHtml(t)}</div>
+              <div class="card-count">${c} lines</div>
+            </div>
+            <div class="card-icon">🌙</div>
+          </div>
+          <button class="btn purple">Start</button>
+        `;
+        card.querySelector("button").onclick = ()=>onStartBedtime(t);
+        gridBed.appendChild(card);
+      }
+    }
+
     bindHeroNav();
   }
 
@@ -279,7 +320,8 @@ window.UI = (function(){
     const chips = home.querySelectorAll(".hero .chip");
     if(!chips || chips.length < 1) return;
 
-    const map = ["secSpeaking","secGrammar","secPronunciation","secVocabulary","secReading"];
+    // ✅ Updated chip map to include Bedtime as the 6th chip
+    const map = ["secSpeaking","secGrammar","secPronunciation","secVocabulary","secReading","secBedtime"];
     chips.forEach((chip, i)=>{
       const target = map[i];
       if(!target) return;
@@ -295,8 +337,7 @@ window.UI = (function(){
     });
   }
 
-  // ✅ NEW: Make topbar brand (logo + title) behave like Home button
-  // This is the safest approach: it triggers existing #btnHome behavior (no logic duplication)
+  // ✅ Make topbar brand (logo + title) behave like Home button
   function bindTopbarBrandHome(){
     const brand = document.getElementById("topbarBrand") || document.querySelector(".topbar .brand");
     const btnHome = document.getElementById("btnHome");
@@ -305,7 +346,6 @@ window.UI = (function(){
     brand.style.cursor = "pointer";
     brand.addEventListener("click", ()=> btnHome.click());
 
-    // keyboard friendly
     brand.addEventListener("keydown", (e)=>{
       if(e.key === "Enter" || e.key === " "){
         e.preventDefault();
@@ -314,7 +354,6 @@ window.UI = (function(){
     });
   }
 
-  // scripts are loaded at end of body, so DOM is ready here
   bindTopbarBrandHome();
 
   return {showScreen, setLoading, renderHome, el};

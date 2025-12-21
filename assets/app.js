@@ -4,6 +4,7 @@
   let pronunciationData = [];
   let vocabularyData = [];
   let readingData = [];
+  let bedtimeData = {}; // ✅ NEW
 
   // ===== History navigation (minimal hook) =====
   const VALID_SCREENS = new Set([
@@ -12,7 +13,8 @@
     "screenGrammar",
     "screenPronunciation",
     "screenVocabulary",
-    "screenReading"
+    "screenReading",
+    "screenBedtime" // ✅ NEW
   ]);
 
   function normalizeScreen(s){
@@ -48,7 +50,6 @@
 
   // Handle browser Back/Forward
   window.addEventListener("popstate", (e)=>{
-    // ⬅️ THÊM DÒNG NÀY
     TTS.cancel();
 
     const sFromState = e && e.state && e.state.screen;
@@ -87,23 +88,42 @@
       return;
     }
 
+    // ===== Bedtime data (JSON local) =====
+    // bedtime_data.js must define global: BEDTIME
+    if(window.BEDTIME && typeof BEDTIME === "object"){
+      bedtimeData = BEDTIME;
+    }else{
+      bedtimeData = {};
+    }
+
     const speakingTopics = Data.topicsWithAll(speakingData);
     const grammarTopics  = Data.topicsWithAll(grammarData);
     const pronunciationTopics = Data.topicsWithAll(pronunciationData);
     const vocabularyTopics = Data.topicsWithAll(vocabularyData);
     const readingTopics = Data.topicsWithAll(readingData);
 
+    const bedtimeTopics = Object.keys(bedtimeData); // ✅ NEW
+
+    const bedtimeCounts = bedtimeTopics.reduce((m,t)=>{
+      m[t] = (bedtimeData[t] || []).length;
+      return m;
+    }, {});
+
+    // ✅ NEW: add Tổng hợp for hero chip
+    bedtimeCounts["Tổng hợp"] = bedtimeTopics.reduce((sum, t)=> sum + ((bedtimeData[t] || []).length), 0);
+
     const counts = {
       speaking: countByTopic(speakingData),
       grammar: countByTopic(grammarData),
       pronunciation: countByTopic(pronunciationData),
       vocabulary: countByTopic(vocabularyData),
-      reading: countByTopic(readingData)
+      reading: countByTopic(readingData),
+      bedtime: bedtimeCounts
     };
 
     UI.setLoading(false);
 
-    // Always land on Home after data loaded (and set initial history entry)
+    // Always land on Home after data loaded
     nav("screenHome", { replace: true });
 
     UI.renderHome({
@@ -112,6 +132,7 @@
       pronunciationTopics,
       vocabularyTopics,
       readingTopics,
+      bedtimeTopics, // ✅ NEW
       counts,
 
       onStartSpeaking: (topic)=>{
@@ -138,6 +159,13 @@
         const items = Data.filterByTopic(readingData, topic);
         nav("screenReading");
         Reading.start(items, topic);
+      },
+
+      // ===== Bedtime callback =====
+      onStartBedtime: (topic)=>{
+        const items = bedtimeData[topic] || [];
+        nav("screenBedtime");
+        Bedtime.start(items, topic);
       }
     });
   }
