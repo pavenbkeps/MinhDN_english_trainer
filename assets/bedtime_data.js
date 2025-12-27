@@ -187,5 +187,211 @@ window.BEDTIME = {
       "en": "“Never stop asking how things work.”",
       "vi": "“Đừng bao giờ ngừng hỏi mọi thứ vận hành như thế nào.”"
     }
+  ],
+  
+  "A Bedtime Journey Through Vietnam’s Capitals": [
+    {
+      "en": "Before going to sleep, Dad wants to tell you a special story.",
+      "vi": "Trước khi đi ngủ, bố muốn kể cho con nghe một câu chuyện đặc biệt."
+    },
+    {
+      "en": "Tonight, we will travel through time to learn about Vietnam’s capitals.",
+      "vi": "Tối nay, chúng ta sẽ du hành ngược thời gian để tìm hiểu về các kinh đô của Việt Nam."
+    },
+    {
+      "en": "Don’t worry. This is not a lesson. It is a bedtime story.",
+      "vi": "Đừng lo. Đây không phải là bài học. Đây là một câu chuyện trước giờ ngủ."
+    },
+
+    {
+      "en": "Long, long ago, Vietnam had a different name.",
+      "vi": "Ngày xửa ngày xưa, Việt Nam có một cái tên khác."
+    },
+    {
+      "en": "In the year 968, the country was called Dai Co Viet.",
+      "vi": "Vào năm 968, đất nước ta được gọi là Đại Cồ Việt."
+    },
+
+    {
+      "en": "At that time, there was a brave and strong king.",
+      "vi": "Khi đó, có một vị vua dũng cảm và mạnh mẽ."
+    },
+    {
+      "en": "His name was King Dinh Bo Linh.",
+      "vi": "Ông tên là vua Đinh Bộ Lĩnh."
+    },
+
+    {
+      "en": "King Dinh Bo Linh needed a safe place to lead the country.",
+      "vi": "Vua Đinh Bộ Lĩnh cần một nơi an toàn để lãnh đạo đất nước."
+    },
+    {
+      "en": "So he chose Hoa Lu as the capital.",
+      "vi": "Vì vậy, ông chọn Hoa Lư làm kinh đô."
+    },
+    {
+      "en": "Hoa Lu was surrounded by mountains and rivers.",
+      "vi": "Hoa Lư được bao quanh bởi núi và sông."
+    },
+    {
+      "en": "It was a very safe place in those days.",
+      "vi": "Đó là một nơi rất an toàn vào thời đó."
+    },
+
+    {
+      "en": "So remember this, my son.",
+      "vi": "Vì vậy, con hãy nhớ điều này nhé."
+    },
+    {
+      "en": "In 968, the capital of Dai Co Viet was Hoa Lu.",
+      "vi": "Năm 968, kinh đô của Đại Cồ Việt là Hoa Lư."
+    },
+
+    {
+      "en": "Many years passed, and Vietnam grew stronger.",
+      "vi": "Nhiều năm trôi qua, Việt Nam ngày càng mạnh hơn."
+    },
+    {
+      "en": "In the year 1010, there was a new king.",
+      "vi": "Vào năm 1010, đất nước có một vị vua mới."
+    },
+    {
+      "en": "His name was King Ly Thai To.",
+      "vi": "Ông tên là vua Lý Thái Tổ."
+    },
+
+    {
+      "en": "King Ly Thai To wanted a bigger and better capital.",
+      "vi": "Vua Lý Thái Tổ muốn một kinh đô lớn hơn và tốt hơn."
+    },
+    {
+      "en": "He decided to move the capital.",
+      "vi": "Ông quyết định dời kinh đô."
+    },
+
+    {
+      "en": "At that time, the place was called Dai La.",
+      "vi": "Khi đó, nơi này được gọi là Đại La."
+    },
+    {
+      "en": "When the king arrived, he saw a golden dragon flying up.",
+      "vi": "Khi nhà vua đến nơi, ông thấy một con rồng vàng bay lên."
+    },
+
+    {
+      "en": "The king believed this was a good sign.",
+      "vi": "Nhà vua tin rằng đó là một điềm lành."
+    },
+    {
+      "en": "So he changed the name Dai La to Thang Long.",
+      "vi": "Vì vậy, ông đổi tên Đại La thành Thăng Long."
+    },
+    {
+      "en": "Thang Long means “Rising Dragon.”",
+      "vi": "Thăng Long có nghĩa là “Rồng bay lên.”"
+    },
+
+    {
+      "en": "From that time, Thang Long became the capital.",
+      "vi": "Từ đó, Thăng Long trở thành kinh đô."
+    },
+    {
+      "en": "So remember this too.",
+      "vi": "Và con hãy nhớ điều này nữa nhé."
+    },
+    {
+      "en": "In 1010, the capital became Thang Long.",
+      "vi": "Năm 1010, kinh đô là Thăng Long."
+    },
+
+    {
+      "en": "Thang Long grew into a big and busy city.",
+      "vi": "Thăng Long dần trở thành một thành phố lớn và nhộn nhịp."
+    },
+    {
+      "en": "Today, we call this city Hanoi.",
+      "vi": "Ngày nay, chúng ta gọi thành phố này là Hà Nội."
+    },
+
+    {
+      "en": "But our journey does not end here.",
+      "vi": "Nhưng chuyến hành trình của chúng ta chưa kết thúc."
+    },
+    {
+      "en": "Many years later, Vietnam had another capital.",
+      "vi": "Nhiều năm sau, Việt Nam lại có một kinh đô khác."
+    },
+
+    {
+      "en": "This time, the capital was in the center of the country.",
+      "vi": "Lần này, kinh đô nằm ở miền Trung đất nước."
+    },
+    {
+      "en": "It was called Phu Xuan.",
+      "vi": "Nơi đó được gọi là Phú Xuân."
+    },
+    {
+      "en": "Today, we know it as Hue.",
+      "vi": "Ngày nay, chúng ta biết nơi đó là Huế."
+    },
+
+    {
+      "en": "Hue was the capital during the Nguyen dynasty.",
+      "vi": "Huế là kinh đô dưới triều Nguyễn."
+    },
+    {
+      "en": "The kings lived near the Perfume River.",
+      "vi": "Các vị vua sống bên dòng sông Hương."
+    },
+    {
+      "en": "They built palaces and strong walls.",
+      "vi": "Họ xây cung điện và những bức tường kiên cố."
+    },
+
+    {
+      "en": "So Vietnam had different capitals at different times.",
+      "vi": "Vì vậy, Việt Nam có những kinh đô khác nhau qua từng thời kỳ."
+    },
+    {
+      "en": "Hoa Lu, Thang Long, and Hue were all capitals.",
+      "vi": "Hoa Lư, Thăng Long và Huế đều từng là kinh đô."
+    },
+
+    {
+      "en": "Today, Vietnam’s capital is Hanoi.",
+      "vi": "Ngày nay, thủ đô của Việt Nam là Hà Nội."
+    },
+    {
+      "en": "Hanoi is the modern name of Thang Long.",
+      "vi": "Hà Nội là tên gọi hiện đại của Thăng Long."
+    },
+
+    {
+      "en": "Dad smiles and looks at you.",
+      "vi": "Bố mỉm cười và nhìn con."
+    },
+    {
+      "en": "You don’t need to remember everything tonight.",
+      "vi": "Con không cần nhớ hết mọi thứ tối nay."
+    },
+    {
+      "en": "Just remember the story.",
+      "vi": "Chỉ cần nhớ câu chuyện là được."
+    },
+
+    {
+      "en": "History is like a long bedtime story.",
+      "vi": "Lịch sử giống như một câu chuyện dài trước giờ ngủ."
+    },
+    {
+      "en": "And tonight, you traveled through Vietnam’s capitals.",
+      "vi": "Và tối nay, con đã du hành qua các kinh đô của Việt Nam."
+    },
+
+    {
+      "en": "Good night, my little explorer.",
+      "vi": "Chúc ngủ ngon nhé, nhà thám hiểm nhỏ của bố."
+    }
   ]
+  
 };
