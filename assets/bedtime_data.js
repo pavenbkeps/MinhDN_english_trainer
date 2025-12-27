@@ -2,11 +2,11 @@ window.BEDTIME = {
   "Richard Feynman – The Boy Who Loved Asking Why": [
     {
       "en": "Before we start the story, Dad wants to tell you who Richard Feynman was.",
-      "vi": "Trước khi bắt đầu câu chuyện, bố muốn kể cho con biết Richard Feynman là ai."
+      "vi": "Trước khi bắt đầu câu chuyện, bố muốn kể cho con biết Richard Fai-nờ-man là ai."
     },
     {
       "en": "Richard Feynman was not only a scientist, but one of the most interesting minds in history.",
-      "vi": "Richard Feynman không chỉ là một nhà khoa học, mà còn là một trong những bộ óc thú vị nhất lịch sử."
+      "vi": "Richard Fai-nờ-man không chỉ là một nhà khoa học, mà còn là một trong những bộ óc thú vị nhất lịch sử."
     },
     {
       "en": "He was one of the greatest physicists in the world, like Isaac Newton and Albert Einstein.",
@@ -18,7 +18,7 @@ window.BEDTIME = {
     },
     {
       "en": "Richard helped scientists understand tiny things like light and atoms using simple drawings called Feynman diagrams.",
-      "vi": "Richard giúp các nhà khoa học hiểu ánh sáng và nguyên tử bằng những hình vẽ đơn giản gọi là biểu đồ Feynman."
+      "vi": "Richard giúp các nhà khoa học hiểu ánh sáng và nguyên tử bằng những hình vẽ đơn giản gọi là biểu đồ Fai-nờ-man."
     },
     {
       "en": "When a space shuttle had an accident, Richard used ice water and a small rubber ring to find the problem.",
@@ -35,7 +35,7 @@ window.BEDTIME = {
 
     {
       "en": "Long ago, there was a boy named Richard Feynman.",
-      "vi": "Ngày xửa ngày xưa, có một cậu bé tên là Richard Feynman."
+      "vi": "Ngày xửa ngày xưa, có một cậu bé tên là Richard Fai-nờ-man."
     },
     {
       "en": "His father was not a scientist. He was a simple salesman.",
