@@ -20,10 +20,14 @@ window.Bedtime = (function(){
   // If you put in assets/: use "assets/bedtime_audio"
   const AUDIO_BASE = (window.BEDTIME_AUDIO_BASE || "bedtime_audio");
 
+  // ===== UI helpers =====
   function escapeHtml(str){
     return (str??"").toString()
-      .replaceAll("&","&amp;").replaceAll("<","&lt;")
-      .replaceAll(">","&gt;").replaceAll('"',"quot;").replaceAll("'","&#39;");
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#39;");
   }
 
   function getScreen(){
@@ -53,8 +57,31 @@ window.Bedtime = (function(){
     const viEl = document.getElementById("btVi");
     if(enEl) enEl.textContent = cur.en || "";
     if(viEl) viEl.textContent = cur.vi || "";
+
+    highlightActiveLine();
     setProgress();
     updateButtons();
+  }
+
+  function ensureAudioEl(){
+    if(audioEl) return audioEl;
+    audioEl = new Audio();
+    audioEl.preload = "auto";
+    return audioEl;
+  }
+
+  function safeStopAudio(){
+    try{
+      if(!audioEl) return;
+      // IMPORTANT: remove handlers first, avoid triggering onerror -> fallback TTS
+      audioEl.onended = null;
+      audioEl.onerror = null;
+      audioEl.pause();
+      audioEl.currentTime = 0;
+      // Optional: unload source without firing error handler
+      audioEl.removeAttribute("src");
+      audioEl.load();
+    }catch(e){}
   }
 
   function stopPlayback(){
@@ -64,14 +91,8 @@ window.Bedtime = (function(){
     // stop TTS
     try{ TTS.cancel(); }catch(e){}
 
-    // stop audio element
-    try{
-      if(audioEl){
-        audioEl.pause();
-        audioEl.currentTime = 0;
-        audioEl.src = "";
-      }
-    }catch(e){}
+    // stop audio element safely (no onerror cascade)
+    safeStopAudio();
 
     releaseWakeLock();
     updateButtons();
@@ -137,16 +158,12 @@ window.Bedtime = (function(){
   }
 
   // ========= Audio playback (prefer file) =========
-  function ensureAudioEl(){
-    if(audioEl) return audioEl;
-    audioEl = new Audio();
-    audioEl.preload = "auto";
-    return audioEl;
-  }
+  async function tryPlayAudioUrl(url, myToken){
+    // If paused/stopped while we were called, don't do anything.
+    if(!playing || myToken !== playToken) return false;
 
-  async function tryPlayAudioUrl(url){
     // Attempt to play audio file. If it fails (404/CORS/etc), return false.
-    // We do a lightweight fetch first to avoid loud error spam.
+    // Lightweight fetch first to avoid loud error spam.
     try{
       const res = await fetch(url, { method: "GET", cache: "no-store" });
       if(!res.ok) return false;
@@ -154,17 +171,25 @@ window.Bedtime = (function(){
       return false;
     }
 
+    // Check again after fetch (user may have paused)
+    if(!playing || myToken !== playToken) return false;
+
     return new Promise((resolve)=>{
       try{
         const a = ensureAudioEl();
-        a.onended = ()=> resolve(true);
-        a.onerror = ()=> resolve(false);
+
+        // Guard: if stopped during playback, resolve quickly.
+        const done = (ok)=>{
+          resolve(!!ok);
+        };
+
+        a.onended = ()=> done(true);
+        a.onerror = ()=> done(false);
         a.src = url;
 
-        // iOS may reject autoplay; but user already pressed Play/Repeat so should be OK
         const p = a.play();
         if(p && typeof p.then === "function"){
-          p.then(()=>{}).catch(()=> resolve(false));
+          p.then(()=>{}).catch(()=> done(false));
         }
       }catch(e){
         resolve(false);
@@ -172,12 +197,16 @@ window.Bedtime = (function(){
     });
   }
 
-  function speakWithTTS(text, lang){
+  function speakWithTTS(text, lang, myToken){
     return new Promise((resolve)=>{
+      // If stopped, do nothing.
+      if(!playing || myToken !== playToken) return resolve(true);
+
       try{
         TTS.speak(text, {
           lang,
-          onend: ()=> resolve(true)
+          onend: ()=> resolve(true),
+          onerror: ()=> resolve(false)
         });
       }catch(e){
         resolve(false);
@@ -185,18 +214,25 @@ window.Bedtime = (function(){
     });
   }
 
-  async function playLinePreferAudio(text, lang, id, which /* "en" or "vi" */){
+  async function playLinePreferAudio(text, lang, id, which, myToken /* "en" or "vi" */){
     const t = (text || "").trim();
     if(!t) return true;
 
     // Prefer audio file if we have id + storySlug
     if(id && storySlug){
       const file = `${AUDIO_BASE}/${storySlug}/${id}_${which}.mp3`;
-      const ok = await tryPlayAudioUrl(file);
+      const ok = await tryPlayAudioUrl(file, myToken);
+
+      // ✅ Key fix: if user paused/stopped while waiting, DO NOT fallback to TTS
+      if(!playing || myToken !== playToken) return true;
+
       if(ok) return true;
-      // fallback to TTS
+      // else fallback to TTS
     }
-    return await speakWithTTS(t, lang);
+
+    // ✅ Only TTS when still playing and token is valid
+    if(!playing || myToken !== playToken) return true;
+    return await speakWithTTS(t, lang, myToken);
   }
 
   // ========= Playback chain =========
@@ -227,7 +263,7 @@ window.Bedtime = (function(){
     const firstLang = enText ? "en-US" : "vi-VN";
     const firstWhich = enText ? "en" : "vi";
 
-    await playLinePreferAudio(firstText, firstLang, id, firstWhich);
+    await playLinePreferAudio(firstText, firstLang, id, firstWhich, myToken);
     if(!playing || myToken !== playToken) return;
 
     // small pause
@@ -236,7 +272,7 @@ window.Bedtime = (function(){
 
     // VI second
     if(viText){
-      await playLinePreferAudio(viText, "vi-VN", id, "vi");
+      await playLinePreferAudio(viText, "vi-VN", id, "vi", myToken);
       if(!playing || myToken !== playToken) return;
     }
 
@@ -301,6 +337,56 @@ window.Bedtime = (function(){
     };
   }
 
+  // ========= Full story view (like Reading) =========
+  function renderFullStory(){
+    const list = document.getElementById("btFullList");
+    if(!list) return;
+
+    let html = "";
+    for(let i=0;i<lines.length;i++){
+      const en = escapeHtml(lines[i]?.en || "");
+      const vi = escapeHtml(lines[i]?.vi || "");
+      html += `
+        <div class="bt-line" data-i="${i}">
+          <div class="bt-line-en">${en}</div>
+          <div class="bt-line-vi">${vi}</div>
+        </div>
+      `;
+    }
+    list.innerHTML = html;
+
+    // Event delegation: click any line to jump
+    list.onclick = (e)=>{
+      const row = e.target.closest(".bt-line");
+      if(!row) return;
+      const i = parseInt(row.getAttribute("data-i"), 10);
+      if(Number.isNaN(i)) return;
+
+      stopPlayback();     // stop current sound cleanly
+      idx = i;
+      renderLine();
+    };
+
+    highlightActiveLine();
+  }
+
+  function highlightActiveLine(){
+    const list = document.getElementById("btFullList");
+    if(!list) return;
+
+    const prev = list.querySelector(".bt-line.active");
+    if(prev) prev.classList.remove("active");
+
+    const cur = list.querySelector(`.bt-line[data-i="${idx}"]`);
+    if(cur){
+      cur.classList.add("active");
+      // keep active line in view (smooth but not annoying)
+      try{
+        cur.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }catch(e){}
+    }
+  }
+
   function start(inputLines, storyTitle){
     lines = Array.isArray(inputLines) ? inputLines.map(x=>({
       en: (x?.en ?? "").toString(),
@@ -313,6 +399,7 @@ window.Bedtime = (function(){
 
     playing = false;
     playToken++; // cancel any old pending async chain
+    safeStopAudio();
 
     const root = getScreen();
     root.innerHTML = `
@@ -322,18 +409,91 @@ window.Bedtime = (function(){
           <div class="quiz-progress" id="btProg"></div>
         </div>
 
-        <div class="quiz-body">
-          <div class="big-emoji">🌙</div>
+        <div class="quiz-body" style="text-align:left;">
+          <!-- Full story panel (Reading-like) -->
+          <div style="
+              border:1px solid var(--border);
+              border-radius:18px;
+              padding:12px;
+              background:#fff;
+              margin-bottom:12px;
+            ">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+              <div style="font-weight:900;">📖 Full Story</div>
+              <div class="muted" style="font-weight:700;">Tap a line to jump</div>
+            </div>
 
-          <div class="qtext" style="margin-top:8px;">
-            <div id="btEn" class="bedtime-en" style="font-weight:700; font-size:1.15rem;"></div>
-            <div id="btVi" class="bedtime-vi" style="margin-top:10px; opacity:0.95;"></div>
+            <div id="btFullList" style="
+                margin-top:10px;
+                max-height: 38vh;
+                overflow:auto;
+                -webkit-overflow-scrolling:touch;
+                padding-right:4px;
+              "></div>
           </div>
 
-          <div class="explain" style="margin-top:14px;" id="btHint">
-            Tip: Tap Play to read English → Vietnamese automatically.
-            <br/>Audio files (if available) will be used first, then fallback to TTS.
+          <!-- Current line panel (per-line mode) -->
+          <div style="
+              border:1px dashed var(--border);
+              border-radius:18px;
+              padding:14px;
+              background:#fff;
+            ">
+            <div class="big-emoji" style="text-align:center;">🌙</div>
+
+            <div id="btEn" class="bedtime-en" style="
+                font-weight: 900;
+                font-size: clamp(20px, 4.2vw, 28px);
+                line-height: 1.35;
+                color:#1d4ed8;
+                text-align:center;
+              "></div>
+
+            <div id="btVi" class="bedtime-vi" style="
+                margin-top: 10px;
+                font-weight: 900;
+                font-size: clamp(20px, 4.2vw, 28px);
+                line-height: 1.35;
+                color:#111827;
+                text-align:center;
+              "></div>
+
+            <div class="explain" style="margin-top:14px;" id="btHint">
+              Tip: Play reads English → Vietnamese automatically.
+              <br/>Audio files (if available) are used first, then fallback to TTS.
+            </div>
           </div>
+
+          <!-- Inline styles for full list items -->
+          <style>
+            #btFullList .bt-line{
+              border:1px solid rgba(229,231,235,.9);
+              border-radius:14px;
+              padding:10px 10px;
+              margin:10px 0;
+              background: rgba(249,250,251,.9);
+              cursor:pointer;
+            }
+            #btFullList .bt-line:active{ transform: scale(.99); }
+            #btFullList .bt-line.active{
+              outline: 3px solid rgba(124,58,237,.25);
+              background: rgba(124,58,237,.08);
+            }
+            #btFullList .bt-line-en{
+              font-weight: 900;
+              color:#1d4ed8;
+              font-size: 16px;
+              line-height: 1.35;
+            }
+            #btFullList .bt-line-vi{
+              margin-top:6px;
+              font-weight: 800;
+              color:#111827;
+              font-size: 15px;
+              line-height: 1.35;
+              opacity: .92;
+            }
+          </style>
         </div>
 
         <div class="nextbar" style="display:flex; gap:10px; flex-wrap:wrap;">
@@ -348,10 +508,20 @@ window.Bedtime = (function(){
 
     document.getElementById("btTitle").textContent = title;
 
-    document.getElementById("btPrev").onclick = ()=>{ stopPlayback(); goPrev(false); };
-    document.getElementById("btNext").onclick = ()=>{ stopPlayback(); goNext(false); };
+    // Build full story list
+    renderFullStory();
+
+    document.getElementById("btPrev").onclick = ()=>{
+      stopPlayback();
+      goPrev(false);
+    };
+    document.getElementById("btNext").onclick = ()=>{
+      stopPlayback();
+      goNext(false);
+    };
 
     document.getElementById("btRepeat").onclick = ()=>{
+      // Repeat current line from the beginning, cleanly
       stopPlayback();
       playing = true;
       requestWakeLock();
