@@ -461,13 +461,16 @@ body{
 .topic-img{
   width: 100%;
   max-width: 520px;
-  height: 180px;
-  object-fit: cover;
+  height: auto;              /* ✅ để ảnh tự giữ tỷ lệ */
+  max-height: 60vh;          /* ✅ không quá cao trên mobile */
+  object-fit: contain;       /* ✅ KHÔNG CẮT ẢNH */
   border-radius: 14px;
   margin: 10px auto 8px;
   display: block;
+  background: #fff;          /* nền trắng nếu ảnh không phủ kín */
   box-shadow: 0 6px 18px rgba(0,0,0,.10);
 }
+
 
 .kwhint{
   margin-top: 10px;
