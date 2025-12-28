@@ -522,18 +522,21 @@ window.Bedtime = (function(){
         </div>
 
         <!-- Controls: icon-only like Reading/Speaking -->
-        <div class="controls">
-          <button class="circle orange" id="btPrev" title="Prev">⏮</button>
-          <button class="circle blue" id="btRepeat" title="Repeat (loop)">🔁</button>
-          <button class="circle green" id="btPlay" title="Play/Pause">▶️</button>
-          <button class="circle blue" id="btNext" title="Next">⏭</button>
-          <button class="circle orange" id="btHome" title="Home">🏠</button>
+        <div class="bt-dock">
+          <div class="controls bt-controls">
+            <button class="circle orange" id="btPrev" title="Prev">⏮</button>
+            <button class="circle blue" id="btRepeat" title="Repeat (loop)">🔁</button>
+            <button class="circle green" id="btPlay" title="Play/Pause">▶️</button>
+            <button class="circle blue" id="btNext" title="Next">⏭</button>
+            <button class="circle orange" id="btHome" title="Home">🏠</button>
+          </div>
+
+          <div class="nextbar bt-nextbar">
+            <button class="next" id="btNextBig">Next</button>
+          </div>
         </div>
 
-        <!-- Optional big Next button (easy on mobile) -->
-        <div class="nextbar">
-          <button class="next" id="btNextBig">Next</button>
-        </div>
+
       </div>
     `;
 
