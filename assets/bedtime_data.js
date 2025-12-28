@@ -392,6 +392,133 @@ window.BEDTIME = {
       "en": "Good night, my little explorer.",
       "vi": "Chúc ngủ ngon nhé, nhà thám hiểm nhỏ của bố."
     }
+  ],
+
+  "The Sun’s Big Warm Hug": [
+    {
+      "en": "Before we start, Dad has a tiny geography secret for you.",
+      "vi": "Trước khi bắt đầu, bố có một bí mật địa lý nhỏ dành cho con."
+    },
+    {
+      "en": "Tonight, we will travel with a little cloud named Nimbus.",
+      "vi": "Tối nay, chúng ta sẽ cùng du hành với một đám mây nhỏ tên là Nimbus."
+    },
+    {
+      "en": "Nimbus loved to explore the Earth and meet children everywhere.",
+      "vi": "Nimbus rất thích khám phá Trái Đất và gặp các bạn nhỏ ở khắp nơi."
+    },
+    {
+      "en": "One day, Nimbus flew to the middle of the Earth.",
+      "vi": "Một ngày nọ, Nimbus bay đến phần giữa của Trái Đất."
+    },
+    {
+      "en": "Below him were Vietnam, Thailand, Singapore, and Indonesia—green and bright.",
+      "vi": "Bên dưới cậu là Việt Nam, Thái Lan, Singapore và Indonesia—xanh tươi và rực rỡ."
+    },
+    {
+      "en": "“Whew! It feels warm here!” Nimbus giggled.",
+      "vi": "“Ui! Ở đây ấm nóng ghê!” Nimbus khúc khích."
+    },
+    {
+      "en": "He saw children eating ice cream and swimming in the sea.",
+      "vi": "Cậu thấy các bạn nhỏ ăn kem và bơi ngoài biển."
+    },
+    {
+      "en": "The Sun was shining strongly, almost straight down.",
+      "vi": "Mặt Trời đang chiếu rất mạnh, gần như thẳng xuống."
+    },
+    {
+      "en": "Mr. Sun whispered, “Do you see an invisible line around Earth’s middle?”",
+      "vi": "Ông Mặt Trời thì thầm: “Con có thấy một đường vô hình quanh phần giữa Trái Đất không?”"
+    },
+    {
+      "en": "“That line is called the Equator.”",
+      "vi": "“Đường đó gọi là đường Xích đạo.”"
+    },
+    {
+      "en": "“Places near the Equator, like Vietnam, Thailand, and Indonesia, get my light more directly,” said Mr. Sun.",
+      "vi": "Ông Mặt Trời nói: “Những nơi gần Xích đạo như Việt Nam, Thái Lan và Indonesia nhận ánh nắng của ta trực tiếp hơn.”"
+    },
+    {
+      "en": "“It is like standing close to a campfire—warm and toasty.”",
+      "vi": "“Nó giống như đứng gần một đống lửa trại—ấm áp và nóng rực.”"
+    },
+    {
+      "en": "Nimbus nodded and floated farther north.",
+      "vi": "Nimbus gật đầu và trôi xa hơn về phía Bắc."
+    },
+    {
+      "en": "He flew toward Japan and South Korea.",
+      "vi": "Cậu bay về phía Nhật Bản và Hàn Quốc."
+    },
+    {
+      "en": "The air became cooler. Children wore jackets and scarves.",
+      "vi": "Không khí mát hơn. Các bạn nhỏ mặc áo khoác và quàng khăn."
+    },
+    {
+      "en": "Nimbus asked, “Mr. Sun, why is it cooler here?”",
+      "vi": "Nimbus hỏi: “Ông Mặt Trời ơi, sao ở đây mát hơn vậy ạ?”"
+    },
+    {
+      "en": "Mr. Sun smiled, “Because Earth is round like a ball.”",
+      "vi": "Ông Mặt Trời mỉm cười: “Vì Trái Đất tròn như một quả bóng.”"
+    },
+    {
+      "en": "“Here, my light comes in at a slant, not straight down.”",
+      "vi": "“Ở đây, ánh nắng của ta chiếu nghiêng, chứ không chiếu thẳng xuống.”"
+    },
+    {
+      "en": "“So it spreads out and feels less hot—like sitting farther from the campfire.”",
+      "vi": "“Vì vậy nó bị tản ra và không nóng bằng—giống như ngồi xa đống lửa trại hơn.”"
+    },
+    {
+      "en": "Nimbus looked at the map in his mind and remembered Vietnam again.",
+      "vi": "Nimbus nghĩ về bản đồ trong đầu và nhớ lại Việt Nam."
+    },
+    {
+      "en": "Mr. Sun added, “That’s also why southern Vietnam is warm all year,”",
+      "vi": "Ông Mặt Trời nói thêm: “Đó cũng là lý do miền Nam Việt Nam ấm quanh năm,”"
+    },
+    {
+      "en": "“but northern Vietnam can have a cool winter.”",
+      "vi": "“còn miền Bắc Việt Nam thì có mùa đông mát lạnh.”"
+    },
+    {
+      "en": "Nimbus drifted even farther north and saw mountains covered in white.",
+      "vi": "Nimbus trôi xa hơn nữa và thấy những ngọn núi phủ màu trắng."
+    },
+    {
+      "en": "“Snow!” he whispered. “So beautiful.”",
+      "vi": "“Tuyết!” cậu thì thầm. “Đẹp quá.”"
+    },
+    {
+      "en": "Mr. Sun said softly, “In winter, places far from the Equator can be cold enough for snow.”",
+      "vi": "Ông Mặt Trời nói khẽ: “Vào mùa đông, những nơi xa Xích đạo có thể lạnh đủ để có tuyết.”"
+    },
+    {
+      "en": "Nimbus looked down at Earth, shining like a blue and green marble.",
+      "vi": "Nimbus nhìn xuống Trái Đất, lấp lánh như một viên bi xanh và xanh lá."
+    },
+    {
+      "en": "“The Equator is like a warm sunny belt,” he said.",
+      "vi": "“Xích đạo giống như một chiếc thắt lưng nắng ấm,” cậu nói."
+    },
+    {
+      "en": "“And the far north and far south can wear chilly hats.”",
+      "vi": "“Còn những vùng rất xa về Bắc và Nam thì như đội những chiếc mũ lạnh.”"
+    },
+    {
+      "en": "Nimbus felt sleepy after his long trip.",
+      "vi": "Nimbus thấy buồn ngủ sau chuyến đi dài."
+    },
+    {
+      "en": "He became a soft white blanket in the night sky, watching over the sleeping world.",
+      "vi": "Cậu biến thành một tấm chăn trắng mềm trên bầu trời đêm, canh giấc ngủ cho cả thế giới."
+    },
+    {
+      "en": "Good night, Nimbus. Good night, Earth.",
+      "vi": "Ngủ ngon nhé, Nimbus. Ngủ ngon nhé, Trái Đất."
+    }
   ]
-  
+    
 };
