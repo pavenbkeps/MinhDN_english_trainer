@@ -596,5 +596,6 @@ window.Bedtime = (function(){
     renderLine();
   }
 
-  return { start };
+  return { start, stop: stopPlayback };
+
 })();

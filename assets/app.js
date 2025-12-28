@@ -17,6 +17,11 @@
     "screenBedtime" // ✅ NEW
   ]);
 
+  function stopAllPlayback(){
+    try{ TTS.cancel(); }catch(e){}
+    try{ window.Bedtime && typeof Bedtime.stop === "function" && Bedtime.stop(); }catch(e){}
+  }
+
   function normalizeScreen(s){
     if(!s) return "screenHome";
     const v = String(s);
@@ -26,6 +31,8 @@
   function nav(screen, opts = {}){
     // opts: { silent: boolean, replace: boolean }
     const target = normalizeScreen(screen);
+
+    stopAllPlayback();
 
     // keep existing behavior
     UI.showScreen(target);
@@ -50,8 +57,6 @@
 
   // Handle browser Back/Forward
   window.addEventListener("popstate", (e)=>{
-    TTS.cancel();
-
     const sFromState = e && e.state && e.state.screen;
     const sFromHash = (location.hash || "").replace("#", "");
     const target = normalizeScreen(sFromState || sFromHash || "screenHome");
@@ -171,11 +176,11 @@
   }
 
   document.getElementById("btnHome").onclick = ()=>{
-    TTS.cancel();
+    stopAllPlayback();
     nav("screenHome");
-    init();
   };
-  document.getElementById("btnStop").onclick = ()=> TTS.cancel();
+  
+  document.getElementById("btnStop").onclick = ()=> stopAllPlayback();
 
   init();
 })();
