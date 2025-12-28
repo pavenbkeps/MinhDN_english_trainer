@@ -53,14 +53,12 @@ window.Bedtime = (function(){
 
     const btnPrev = document.getElementById("btPrev");
     const btnNext = document.getElementById("btNext");
-    const btnNextBig = document.getElementById("btNextBig");
 
     const prevDisabled = (idx <= 0);
     const nextDisabled = (idx >= lines.length - 1);
 
     if(btnPrev) btnPrev.disabled = prevDisabled;
     if(btnNext) btnNext.disabled = nextDisabled;
-    if(btnNextBig) btnNextBig.disabled = nextDisabled;
   }
 
   function renderLine(){
@@ -530,12 +528,7 @@ window.Bedtime = (function(){
             <button class="circle blue" id="btNext" title="Next">⏭</button>
             <button class="circle orange" id="btHome" title="Home">🏠</button>
           </div>
-
-          <div class="nextbar bt-nextbar">
-            <button class="next" id="btNextBig">Next</button>
-          </div>
         </div>
-
 
       </div>
     `;
@@ -551,12 +544,6 @@ window.Bedtime = (function(){
     };
 
     document.getElementById("btNext").onclick = ()=>{
-      repeatMode = false;
-      stopPlayback();
-      goNext(false);
-    };
-
-    document.getElementById("btNextBig").onclick = ()=>{
       repeatMode = false;
       stopPlayback();
       goNext(false);
