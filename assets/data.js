@@ -48,21 +48,46 @@ window.Data = (function(){
   }
 
   function parseSpeaking(csvText){
-    const rows = csvText.split(/\r?\n/).filter(Boolean);
+    const rows = splitCSVRows(csvText).filter(r => r.trim().length);
     let start = 0;
     if(rows[0] && rows[0].toLowerCase().includes("topic")) start = 1;
+
     const items = [];
+
+    let lastTopic = "";
+    let lastImageKey = "";
+
     for(let i=start;i<rows.length;i++){
       const cols = smartSplitCSVLine(rows[i]);
       if(cols.length < 3) continue;
+
       const topic = stripQuotes(cols[0]);
       const question = stripQuotes(cols[1]);
       const answer = stripQuotes(cols[2]);
+
+      // NEW columns
+      const hint  = stripQuotes(cols[3] ?? "");   // col D
+      let image   = stripQuotes(cols[4] ?? "");   // col E
+
       if(!topic || !question) continue;
-      items.push({topic, question, answer});
+
+      // Fill-down image by group; reset when topic changes
+      if(topic !== lastTopic){
+        lastTopic = topic;
+        lastImageKey = ""; // reset to avoid leaking previous topic image
+      }
+      if(image){
+        lastImageKey = image;
+      }else{
+        image = lastImageKey;
+      }
+
+      items.push({ topic, question, answer, hint, image });
     }
     return items;
   }
+
+
 
   function parseGrammar(csvText){
     const rows = csvText.split(/\r?\n/).filter(Boolean);

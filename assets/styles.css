@@ -457,3 +457,22 @@ body{
 
 /* Hero chips behave like navigation buttons */
 .chip:active{transform:scale(.98)}
+
+.topic-img{
+  width: 100%;
+  max-width: 520px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin: 10px auto 8px;
+  display: block;
+  box-shadow: 0 6px 18px rgba(0,0,0,.10);
+}
+
+.kwhint{
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(0,0,0,.05);
+  font-weight: 600;
+}

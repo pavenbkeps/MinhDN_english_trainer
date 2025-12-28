@@ -12,6 +12,44 @@ window.Speaking = (function(){
     }
     return arr;
   }
+  function normalizeKey(s){
+    return String(s || "")
+      .trim()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // bỏ dấu
+      .toLowerCase()
+      .replace(/\.(png|jpg|jpeg|webp)$/i, "")          // bỏ đuôi nếu người dùng lỡ nhập
+      .replace(/[^a-z0-9\/]+/g, "_")                   // cho phép cả folder con "food/pizza_1"
+      .replace(/_+/g, "_")
+      .replace(/^_+|_+$/g, "");
+  }
+
+  function setSpeakingImage(imageKey){
+    const img = UI.el("spTopicImg");
+    const key = normalizeKey(imageKey);
+
+    if(!key){
+      img.hidden = true;
+      img.removeAttribute("src");
+      return;
+    }
+
+    const base = `assets/topic_images/speaking/${key}`;
+    const exts = [".png", ".jpg", ".jpeg", ".webp"];
+    let k = 0;
+
+    function tryNext(){
+      if(k >= exts.length){
+        img.hidden = true;
+        img.removeAttribute("src");
+        return;
+      }
+      img.src = base + exts[k++];
+    }
+
+    img.onerror = tryNext;
+    img.onload = () => { img.hidden = false; };
+    tryNext();
+  }
 
   function start(topicItems, topicTitle){
     items = topicItems.slice();
@@ -28,9 +66,11 @@ window.Speaking = (function(){
           <div class="quiz-progress" id="spProg"></div>
         </div>
         <div class="quiz-body">
+          <img id="spTopicImg" class="topic-img" alt="Topic image" hidden />
           <div class="big-emoji" id="spEmoji">👂</div>
           <div class="qtext" id="spQ"></div>
-          <div class="hint" id="spA" hidden></div>
+          <div class="kwhint" id="spHintKw" hidden></div>
+          <div class="hint" id="spA" hidden></div>         
         </div>
 
         <div class="controls">
@@ -61,10 +101,21 @@ window.Speaking = (function(){
     UI.el("spProg").textContent = `${done}/${total}`;
   }
 
+
   function showQuestion(){
     if(!current) return;
     UI.el("spQ").textContent = current.question;
     UI.el("spEmoji").textContent = "📝";
+
+    const hk = UI.el("spHintKw");
+    const h = (current.hint || "").trim();
+    if(h){
+      hk.hidden = false;
+      hk.textContent = "Hint: " + h;
+    }else{
+      hk.hidden = true;
+      hk.textContent = "";
+    }
   }
 
   function showAnswer(read){
@@ -102,6 +153,14 @@ window.Speaking = (function(){
 
     UI.el("spEmoji").textContent = "👂";
     UI.el("spQ").textContent = "";
+    // NEW: hint keywords reset
+    const hk = UI.el("spHintKw");
+    hk.hidden = true;
+    hk.textContent = "";
+
+    // NEW: set image for this question/group
+    setSpeakingImage(current.image);
+
     const a = UI.el("spA");
     a.hidden = true;
     a.textContent = current.answer || "";
