@@ -12,6 +12,9 @@ window.Bedtime = (function(){
   // Token to cancel any pending async chain
   let playToken = 0;
 
+  // Repeat/Loop current line forever
+  let repeatMode = false;
+
   // Cache for hash ids (key = en||vi)
   const idCache = new Map();
 
@@ -44,6 +47,9 @@ window.Bedtime = (function(){
   function updateButtons(){
     const btnPlay = document.getElementById("btPlay");
     if(btnPlay) btnPlay.textContent = playing ? "⏸" : "▶️";
+
+    const btnRepeat = document.getElementById("btRepeat");
+    if(btnRepeat) btnRepeat.classList.toggle("active", !!repeatMode);
 
     const btnPrev = document.getElementById("btPrev");
     const btnNext = document.getElementById("btNext");
@@ -184,7 +190,6 @@ window.Bedtime = (function(){
       try{
         const a = ensureAudioEl();
 
-        // Guard: if stopped during playback, resolve quickly.
         const done = (ok)=>{
           resolve(!!ok);
         };
@@ -205,7 +210,6 @@ window.Bedtime = (function(){
 
   function speakWithTTS(text, lang, myToken){
     return new Promise((resolve)=>{
-      // If stopped, do nothing.
       if(!playing || myToken !== playToken) return resolve(true);
 
       try{
@@ -224,19 +228,17 @@ window.Bedtime = (function(){
     const t = (text || "").trim();
     if(!t) return true;
 
-    // Prefer audio file if we have id + storySlug
     if(id && storySlug){
       const file = `${AUDIO_BASE}/${storySlug}/${id}_${which}.mp3`;
       const ok = await tryPlayAudioUrl(file, myToken);
 
-      // ✅ Key fix: if user paused/stopped while waiting, DO NOT fallback to TTS
+      // ✅ if user paused/stopped while waiting, DO NOT fallback to TTS
       if(!playing || myToken !== playToken) return true;
 
       if(ok) return true;
       // else fallback to TTS
     }
 
-    // ✅ Only TTS when still playing and token is valid
     if(!playing || myToken !== playToken) return true;
     return await speakWithTTS(t, lang, myToken);
   }
@@ -251,20 +253,24 @@ window.Bedtime = (function(){
     const viText = (cur.vi || "").trim();
 
     if(!enText && !viText){
+      // if empty line:
+      if(repeatMode){
+        // repeatMode: skip empty forever would be bad -> stop
+        stopPlayback();
+        return;
+      }
       goNext(true);
       return;
     }
 
-    // Compute id (same as generator). Needed for both EN and VI files.
     let id = "";
     try{
       id = await getHash8(enText, viText);
     }catch(e){
-      id = ""; // if crypto not available, fallback to TTS
+      id = "";
     }
     if(!playing || myToken !== playToken) return;
 
-    // EN first (if EN empty then read VI as EN step)
     const firstText = enText || viText;
     const firstLang = enText ? "en-US" : "vi-VN";
     const firstWhich = enText ? "en" : "vi";
@@ -272,20 +278,25 @@ window.Bedtime = (function(){
     await playLinePreferAudio(firstText, firstLang, id, firstWhich, myToken);
     if(!playing || myToken !== playToken) return;
 
-    // small pause
     await new Promise(r => setTimeout(r, 250));
     if(!playing || myToken !== playToken) return;
 
-    // VI second
     if(viText){
       await playLinePreferAudio(viText, "vi-VN", id, "vi", myToken);
       if(!playing || myToken !== playToken) return;
     }
 
-    // next
+    // ===== next / repeat =====
+    await new Promise(r => setTimeout(r, 250));
+    if(!playing || myToken !== playToken) return;
+
+    if(repeatMode){
+      // ✅ loop the current line forever
+      speakENThenVIThenMaybeNext();
+      return;
+    }
+
     if(idx < lines.length - 1){
-      await new Promise(r => setTimeout(r, 250));
-      if(!playing || myToken !== playToken) return;
       goNext(true);
     }else{
       showFinish();
@@ -361,14 +372,15 @@ window.Bedtime = (function(){
     }
     list.innerHTML = html;
 
-    // Event delegation: click any line to jump
     list.onclick = (e)=>{
       const row = e.target.closest(".bt-line");
       if(!row) return;
       const i = parseInt(row.getAttribute("data-i"), 10);
       if(Number.isNaN(i)) return;
 
-      stopPlayback();     // stop current sound cleanly
+      // Jumping should exit repeat mode
+      repeatMode = false;
+      stopPlayback();
       idx = i;
       renderLine();
     };
@@ -386,7 +398,6 @@ window.Bedtime = (function(){
     const cur = list.querySelector(`.bt-line[data-i="${idx}"]`);
     if(cur){
       cur.classList.add("active");
-      // keep active line in view (smooth but not annoying)
       try{
         cur.scrollIntoView({ block: "nearest", behavior: "smooth" });
       }catch(e){}
@@ -406,6 +417,9 @@ window.Bedtime = (function(){
     playing = false;
     playToken++; // cancel any old pending async chain
     safeStopAudio();
+
+    // Keep repeatMode OFF when entering a story (safer UX)
+    repeatMode = false;
 
     const root = getScreen();
     root.innerHTML = `
@@ -469,7 +483,7 @@ window.Bedtime = (function(){
             </div>
           </div>
 
-          <!-- Inline styles for full list items -->
+          <!-- Inline styles for full list items + repeat active (self-contained, no need edit styles.css) -->
           <style>
             #btFullList .bt-line{
               border:1px solid rgba(229,231,235,.9);
@@ -498,13 +512,19 @@ window.Bedtime = (function(){
               line-height: 1.35;
               opacity: .92;
             }
+            /* Repeat button pressed state */
+            .controls .circle.active{
+              transform: translateY(2px);
+              box-shadow: inset 0 6px 14px rgba(0,0,0,.18);
+              filter: brightness(0.95);
+            }
           </style>
         </div>
 
         <!-- Controls: icon-only like Reading/Speaking -->
         <div class="controls">
           <button class="circle orange" id="btPrev" title="Prev">⏮</button>
-          <button class="circle blue" id="btRepeat" title="Repeat">🔁</button>
+          <button class="circle blue" id="btRepeat" title="Repeat (loop)">🔁</button>
           <button class="circle green" id="btPlay" title="Play/Pause">▶️</button>
           <button class="circle blue" id="btNext" title="Next">⏭</button>
           <button class="circle orange" id="btHome" title="Home">🏠</button>
@@ -519,29 +539,38 @@ window.Bedtime = (function(){
 
     document.getElementById("btTitle").textContent = title;
 
-    // Build full story list
     renderFullStory();
 
     document.getElementById("btPrev").onclick = ()=>{
+      repeatMode = false;
       stopPlayback();
       goPrev(false);
     };
+
     document.getElementById("btNext").onclick = ()=>{
-      stopPlayback();
-      goNext(false);
-    };
-    document.getElementById("btNextBig").onclick = ()=>{
+      repeatMode = false;
       stopPlayback();
       goNext(false);
     };
 
-    document.getElementById("btRepeat").onclick = ()=>{
-      // Repeat current line from the beginning, cleanly
+    document.getElementById("btNextBig").onclick = ()=>{
+      repeatMode = false;
       stopPlayback();
-      playing = true;
-      requestWakeLock();
+      goNext(false);
+    };
+
+    // ✅ Toggle repeat (loop current line forever)
+    document.getElementById("btRepeat").onclick = ()=>{
+      repeatMode = !repeatMode;
       updateButtons();
-      speakENThenVIThenMaybeNext();
+
+      // If not playing, turning repeat ON should start playing (like reading)
+      if(repeatMode && !playing){
+        playing = true;
+        requestWakeLock();
+        updateButtons();
+        speakENThenVIThenMaybeNext();
+      }
     };
 
     document.getElementById("btPlay").onclick = ()=>{
@@ -556,13 +585,13 @@ window.Bedtime = (function(){
     };
 
     document.getElementById("btHome").onclick = ()=>{
+      repeatMode = false;
       stopPlayback();
       const btnHome = document.getElementById("btnHome");
       if(btnHome) btnHome.click();
       else UI.showScreen("screenHome");
     };
 
-    // Warm up (keeps old behavior for TTS)
     try{ TTS.warmUp(); }catch(e){}
     renderLine();
   }
