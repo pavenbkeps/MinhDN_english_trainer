@@ -43,12 +43,18 @@ window.Bedtime = (function(){
 
   function updateButtons(){
     const btnPlay = document.getElementById("btPlay");
-    if(btnPlay) btnPlay.textContent = playing ? "⏸ Pause" : "▶️ Play";
+    if(btnPlay) btnPlay.textContent = playing ? "⏸" : "▶️";
 
     const btnPrev = document.getElementById("btPrev");
     const btnNext = document.getElementById("btNext");
-    if(btnPrev) btnPrev.disabled = (idx <= 0);
-    if(btnNext) btnNext.disabled = (idx >= lines.length - 1);
+    const btnNextBig = document.getElementById("btNextBig");
+
+    const prevDisabled = (idx <= 0);
+    const nextDisabled = (idx >= lines.length - 1);
+
+    if(btnPrev) btnPrev.disabled = prevDisabled;
+    if(btnNext) btnNext.disabled = nextDisabled;
+    if(btnNextBig) btnNextBig.disabled = nextDisabled;
   }
 
   function renderLine(){
@@ -316,9 +322,9 @@ window.Bedtime = (function(){
           <div class="big-emoji">🌙</div>
           <div class="qtext"><strong>Finished!</strong></div>
           <div class="muted">You listened to the whole story.</div>
-          <div class="nextbar" style="gap:10px; display:flex;">
-            <button class="next" id="btRestart">Restart</button>
-            <button class="next" id="btHome">Home</button>
+          <div class="controls">
+            <button class="circle blue" id="btRestart" title="Restart">🔁</button>
+            <button class="circle orange" id="btHome" title="Home">🏠</button>
           </div>
         </div>
       </div>
@@ -419,8 +425,8 @@ window.Bedtime = (function(){
               margin-bottom:12px;
             ">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-              <div style="font-weight:900;">📖 Full Story</div>
-              <div class="muted" style="font-weight:700;">Tap a line to jump</div>
+              <div style="font-weight:650;">📖 Full Story</div>
+              <div class="muted" style="font-weight:600;">Tap a line to jump</div>
             </div>
 
             <div id="btFullList" style="
@@ -442,7 +448,7 @@ window.Bedtime = (function(){
             <div class="big-emoji" style="text-align:center;">🌙</div>
 
             <div id="btEn" class="bedtime-en" style="
-                font-weight: 900;
+                font-weight: 650;
                 font-size: clamp(20px, 4.2vw, 28px);
                 line-height: 1.35;
                 color:#1d4ed8;
@@ -451,16 +457,15 @@ window.Bedtime = (function(){
 
             <div id="btVi" class="bedtime-vi" style="
                 margin-top: 10px;
-                font-weight: 900;
+                font-weight: 600;
                 font-size: clamp(20px, 4.2vw, 28px);
                 line-height: 1.35;
                 color:#111827;
                 text-align:center;
               "></div>
 
-            <div class="explain" style="margin-top:14px;" id="btHint">
-              Tip: Play reads English → Vietnamese automatically.
-              <br/>Audio files (if available) are used first, then fallback to TTS.
+            <div class="muted" style="margin-top:10px; text-align:center;" id="btHint">
+              Tip: English → Vietnamese. Audio first, then TTS.
             </div>
           </div>
 
@@ -480,14 +485,14 @@ window.Bedtime = (function(){
               background: rgba(124,58,237,.08);
             }
             #btFullList .bt-line-en{
-              font-weight: 900;
+              font-weight: 650;
               color:#1d4ed8;
               font-size: 16px;
               line-height: 1.35;
             }
             #btFullList .bt-line-vi{
               margin-top:6px;
-              font-weight: 800;
+              font-weight: 600;
               color:#111827;
               font-size: 15px;
               line-height: 1.35;
@@ -496,12 +501,18 @@ window.Bedtime = (function(){
           </style>
         </div>
 
-        <div class="nextbar" style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="next" id="btPrev">⏮ Prev</button>
-          <button class="next" id="btRepeat">🔁 Repeat</button>
-          <button class="next" id="btPlay">▶️ Play</button>
-          <button class="next" id="btNext">⏭ Next</button>
-          <button class="next" id="btHome">🏠 Home</button>
+        <!-- Controls: icon-only like Reading/Speaking -->
+        <div class="controls">
+          <button class="circle orange" id="btPrev" title="Prev">⏮</button>
+          <button class="circle blue" id="btRepeat" title="Repeat">🔁</button>
+          <button class="circle green" id="btPlay" title="Play/Pause">▶️</button>
+          <button class="circle blue" id="btNext" title="Next">⏭</button>
+          <button class="circle orange" id="btHome" title="Home">🏠</button>
+        </div>
+
+        <!-- Optional big Next button (easy on mobile) -->
+        <div class="nextbar">
+          <button class="next" id="btNextBig">Next</button>
         </div>
       </div>
     `;
@@ -516,6 +527,10 @@ window.Bedtime = (function(){
       goPrev(false);
     };
     document.getElementById("btNext").onclick = ()=>{
+      stopPlayback();
+      goNext(false);
+    };
+    document.getElementById("btNextBig").onclick = ()=>{
       stopPlayback();
       goNext(false);
     };
