@@ -140,9 +140,18 @@ window.UI = (function(){
           </div>
           <div class="card-icon">🧩</div>
         </div>
-        <button class="btn purple">Start</button>
+
+        <div class="card-actions">
+          <button class="btn purple half">Start</button>
+          <button class="btn ghost half" data-learn="1">Learn</button>
+        </div>
       `;
-      card.querySelector("button").onclick = ()=>onStartGrammar(t);
+      const btnStart = card.querySelector("button.btn.purple");
+      btnStart.onclick = ()=>onStartGrammar(t);
+
+      const btnLearn = card.querySelector('button[data-learn="1"]');
+      btnLearn.onclick = ()=>onLearnGrammar && onLearnGrammar(t);
+
       gridGrammar.appendChild(card);
     }
 
