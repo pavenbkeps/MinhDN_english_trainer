@@ -229,6 +229,288 @@ window.Grammar = (function(){
     setProgress();
     if(autoSpeak) TTS.speak(current.question);
   }
+  // THem tu day
+  // ================================
+  // LEARN UI (Modal)
+  // ================================
+  function ensureLearnCSS(){
+    if(document.getElementById("learnModalCSS")) return;
+    const st = document.createElement("style");
+    st.id = "learnModalCSS";
+    st.textContent = `
+      .learn-modal{
+        position: fixed; inset: 0; z-index: 9999;
+        background: rgba(0,0,0,.35);
+        display:flex; align-items:center; justify-content:center;
+        padding: 14px;
+      }
+      .learn-panel{
+        width: min(920px, 100%);
+        max-height: min(86vh, 900px);
+        overflow:auto;
+        background:#fff;
+        border-radius: 18px;
+        border: 1px solid rgba(229,231,235,.95);
+        box-shadow: 0 20px 50px rgba(0,0,0,.25);
+        padding: 14px;
+      }
+      .learn-top{
+        display:flex; align-items:flex-start; justify-content:space-between;
+        gap: 10px;
+      }
+      .learn-badge{
+        display:inline-block;
+        font-weight: 900;
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(124,58,237,.12);
+        border: 1px solid rgba(124,58,237,.25);
+      }
+      .learn-title{
+        margin-top: 8px;
+        font-weight: 950;
+        font-size: 22px;
+      }
+      .learn-sub{
+        margin-top: 4px;
+        opacity: .8;
+        font-weight: 650;
+        font-size: 13px;
+      }
+      .learn-x{
+        border:none; background: rgba(17,24,39,.06);
+        border: 1px solid rgba(229,231,235,.95);
+        width: 40px; height: 40px;
+        border-radius: 12px;
+        font-weight: 950;
+        cursor:pointer;
+      }
+      .learn-card{
+        margin-top: 12px;
+        background: #fff;
+        border: 1px solid rgba(229,231,235,.95);
+        border-radius: 16px;
+        padding: 12px;
+      }
+      .learn-card-title{
+        font-weight: 950;
+        font-size: 16px;
+        margin-bottom: 8px;
+      }
+      .learn-card-points{ border-left: 6px solid rgba(34,197,94,.55); }
+      .learn-card-examples{ border-left: 6px solid rgba(59,130,246,.55); }
+      .learn-card-links{ border-left: 6px solid rgba(245,158,11,.55); }
 
-  return {start};
+      .learn-points{ margin:0; padding-left: 18px; line-height: 1.55; font-size: 16px; }
+      .learn-points li{ margin: 8px 0; }
+
+      .learn-example{
+        border: 1px dashed rgba(229,231,235,.95);
+        border-radius: 14px;
+        padding: 10px 12px;
+        margin: 10px 0;
+        background: rgba(249,250,251,.9);
+      }
+      .learn-example .en{ font-weight: 850; color:#1d4ed8; font-size: 16px; }
+      .learn-example .vi{ margin-top: 6px; opacity:.92; font-size: 15px; }
+
+      .learn-links{ display:flex; gap:10px; flex-wrap:wrap; }
+      .learn-link{
+        display:inline-flex; align-items:center; gap:8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(17,24,39,.04);
+        border: 1px solid rgba(229,231,235,.95);
+        font-weight: 850;
+        text-decoration: none;
+        color: #111827;
+      }
+
+      .learn-actions{
+        display:flex; gap:10px; margin-top: 12px;
+      }
+      .learn-btn{
+        flex:1 1 0;
+        border:none;
+        border-radius: 14px;
+        padding: 12px 12px;
+        font-weight: 950;
+        font-size: 16px;
+        cursor:pointer;
+      }
+      .learn-btn.primary{ background: var(--purple); color:#fff; }
+      .learn-btn.secondary{
+        background: rgba(17,24,39,.06);
+        border: 1px solid rgba(229,231,235,.95);
+        color:#111827;
+      }
+
+      @media (max-width: 520px){
+        .learn-title{ font-size: 20px; }
+        .learn-actions{ flex-direction: column; }
+      }
+    `;
+    document.head.appendChild(st);
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#39;");
+  }
+
+  function closeLearn(){
+    const m = document.getElementById("learnModal");
+    if(m) m.remove();
+  }
+
+  function openLearn(topicTitle, topicItems){
+
+    ensureLearnCSS();
+    try{ TTS.cancel(); }catch(e){}
+
+    const data = (window.LEARN_DATA && window.LEARN_DATA.grammar)
+      ? window.LEARN_DATA.grammar[topicTitle]
+      : null;
+
+    // remove old modal if any
+    closeLearn();
+
+    const pointsHtml = data?.points?.map(p => `<li>${p}</li>`).join("") || "";
+    const examplesHtml = data?.examples?.map(ex => `
+      <div class="learn-example">
+        <div class="en">${ex.en || ""}</div>
+        <div class="vi">${ex.vi || ""}</div>
+      </div>
+    `).join("") || "";
+    const linksHtml = data?.links?.map(l => `
+      <a class="learn-link" target="_blank" rel="noopener" href="${l.url}">
+        ${escapeHtml(l.label || "Open")}
+      </a>
+    `).join("") || "";
+
+    const titleShow = data?.title || topicTitle;
+    const summaryShow = data?.summary || "";
+
+    document.body.insertAdjacentHTML("beforeend", `
+      <div class="learn-modal" id="learnModal">
+        <div class="learn-panel" role="dialog" aria-modal="true">
+          <div class="learn-top">
+            <div>
+              <div class="learn-badge">📘 LEARN</div>
+              <div class="learn-title">${escapeHtml(titleShow)}</div>
+              ${summaryShow ? `<div class="learn-sub">${escapeHtml(summaryShow)}</div>` : ``}
+            </div>
+            <button class="learn-x" id="learnClose" type="button">✕</button>
+          </div>
+
+          ${data ? `
+            <div class="learn-card learn-card-points">
+              <div class="learn-card-title">✅ What to remember</div>
+              <ul class="learn-points">${pointsHtml}</ul>
+            </div>
+
+            ${examplesHtml ? `
+              <div class="learn-card learn-card-examples">
+                <div class="learn-card-title">💡 Examples</div>
+                ${examplesHtml}
+              </div>
+            ` : ``}
+
+            ${linksHtml ? `
+              <div class="learn-card learn-card-links">
+                <div class="learn-card-title">🎬 Watch / Read</div>
+                <div class="learn-links">${linksHtml}</div>
+              </div>
+            ` : ``}
+          ` : `
+            <div class="learn-card learn-card-points">
+              <div class="learn-card-title">📌 Chưa có Learn cho topic này</div>
+              <div style="line-height:1.55; opacity:.9">
+                Bạn thêm key đúng tên topic vào <code>assets/learn_data.js</code>:<br>
+                <b>${escapeHtml(topicTitle)}</b>
+              </div>
+            </div>
+          `}
+
+          <div class="learn-actions">
+            <button class="learn-btn secondary" id="learnBack" type="button">⬅ Back</button>
+            <button class="learn-btn primary" id="learnGo" type="button">▶ Continue</button>
+          </div>
+        </div>
+      </div>
+    `);
+
+    const modal = document.getElementById("learnModal");
+    const closeBtn = document.getElementById("learnClose");
+    const backBtn  = document.getElementById("learnBack");
+    const goBtn    = document.getElementById("learnGo");
+
+    // ✕ : về Home
+    if(closeBtn){
+      closeBtn.onclick = ()=>{
+        closeLearn();
+
+        // ưu tiên click nút Home có sẵn để đồng bộ logic app.js (stop TTS, pushState...)
+        const homeBtn = document.getElementById("btnHome");
+        if(homeBtn && typeof homeBtn.click === "function"){
+          homeBtn.click();
+          return;
+        }
+
+        // fallback
+        if(window.UI && typeof UI.showScreen === "function"){
+          UI.showScreen("screenHome");
+        }
+      };
+    }
+
+    // ⬅ Back : quay lại module Grammar (màn danh sách topic)
+    if(backBtn){
+      backBtn.onclick = ()=>{
+        closeLearn();
+        if(window.UI && typeof UI.showScreen === "function"){
+          UI.showScreen("screenHome"); // Home chính là nơi có danh sách topic Grammar
+        }
+      };
+    }
+
+    // ▶ Continue : vào Start của topic đó (chạy quiz)
+    if(goBtn){
+      goBtn.onclick = ()=>{
+        closeLearn();
+
+        // ƯU TIÊN dùng topicItems được truyền vào từ app.js
+        if(Array.isArray(topicItems) && topicItems.length){
+          start(topicItems, topicTitle);
+          return;
+        }
+
+        // fallback: nếu Learn được gọi khi đang ở trong quiz (đã có items)
+        if(Array.isArray(items) && items.length){
+          start(items, title || topicTitle);
+          return;
+        }
+
+        // fallback cuối: về Home để user bấm Start (không alert nữa)
+        if(window.UI && typeof UI.showScreen === "function"){
+          UI.showScreen("screenHome");
+        }
+      };
+    }
+
+
+    // click outside closes
+    if(modal){
+      modal.addEventListener("click", (e)=>{
+        if(e.target === modal) closeLearn();
+      });
+    }
+  }
+
+  return { start, openLearn };
 })();

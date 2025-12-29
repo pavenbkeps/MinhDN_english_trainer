@@ -150,6 +150,26 @@
         nav("screenGrammar");
         Grammar.start(items, topic);
       },
+
+      // ✅ NEW: Learn for Grammar (open Learn UI)
+      // Note: UI (ui.js) will call this when user clicks Learn button on a Grammar topic card.
+      onLearnGrammar: (topic)=>{
+        // Go to Grammar screen (so Learn UI can render there), then open learn
+        nav("screenGrammar");
+
+        try{
+          if(window.Grammar && typeof Grammar.openLearn === "function"){
+            const items = Data.filterByTopic(grammarData, topic);
+            Grammar.openLearn(topic, items);  
+          }else{
+            alert("Learn UI chưa sẵn sàng. Cần thêm learn_data.js và hàm Grammar.openLearn(topic).");
+          }
+        }catch(e){
+          console.error(e);
+          alert("Không mở được Learn. Xem console để biết lỗi.");
+        }
+      },
+
       onStartPronunciation: (topic)=>{
         const items = Data.filterByTopic(pronunciationData, topic);
         nav("screenPronunciation");

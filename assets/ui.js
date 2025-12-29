@@ -72,6 +72,7 @@ window.UI = (function(){
     counts,
     onStartSpeaking,
     onStartGrammar,
+    onLearnGrammar,     // ✅ thêm dòng này
     onStartPronunciation,
     onStartVocabulary,
     onStartReading,

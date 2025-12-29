@@ -510,3 +510,40 @@ body{
 #screenBedtime{
   padding-bottom: calc(110px + env(safe-area-inset-bottom));
 }
+
+/* =========================================================
+   Grammar Topic: Start + Learn (50 / 50)
+   Scoped – không ảnh hưởng module khác
+   ========================================================= */
+
+.card-actions{
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.card-actions .half{
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Learn button style */
+/* Learn button (better look) */
+.btn.ghost{
+  background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(245,245,255,.9));
+  border: 2px solid rgba(93, 95, 239, .35);
+  color: #2b2b7a;
+  font-weight: 900;
+  box-shadow: 0 10px 20px rgba(0,0,0,.06);
+}
+.btn.ghost:active{
+  transform: scale(.99);
+}
+
+
+/* Mobile tuning */
+@media (max-width: 520px){
+  .card-actions{
+    gap: 8px;
+  }
+}
