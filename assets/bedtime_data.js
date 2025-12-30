@@ -519,6 +519,183 @@ window.BEDTIME = {
       "en": "Good night, Nimbus. Good night, Earth.",
       "vi": "Ngủ ngon nhé, Nimbus. Ngủ ngon nhé, Trái Đất."
     }
-  ]
-    
+  ],
+  "Pham Tuan – The Hero Who Touched the Stars": [
+    {
+      "en": "Tonight, Dad wants to tell you about a Vietnamese hero who did two amazing things.",
+      "vi": "Tối nay, bố muốn kể cho con nghe về một người anh hùng Việt Nam đã làm được hai điều thật kỳ diệu."
+    },
+    {
+      "en": "First, he was the very first Vietnamese and Asian person to fly into space.",
+      "vi": "Đầu tiên, chú là người Việt Nam và người châu Á đầu tiên bay vào vũ trụ."
+    },
+    {
+      "en": "Second, people remember him for a brave air battle in 1972, during the famous “Dien Bien Phu in the air” campaign.",
+      "vi": "Thứ hai, mọi người nhớ đến chú qua một trận không chiến dũng cảm năm 1972, trong chiến dịch “Điện Biên Phủ trên không”."
+    },
+    {
+      "en": "His name is Pham Tuan. But before he was a legend, he was just a little boy with a big dream.",
+      "vi": "Tên chú ấy là Phạm Tuân. Nhưng trước khi trở thành huyền thoại, chú cũng chỉ là một cậu bé với một ước mơ lớn."
+    },
+
+    {
+      "en": "Pham Tuan was born in the countryside of Thai Binh province.",
+      "vi": "Chú Phạm Tuân sinh ra ở vùng quê Thái Bình."
+    },
+    {
+      "en": "He loved watching the clouds and dreamed of flying high like a bird.",
+      "vi": "Chú rất thích ngắm mây và mơ ước được bay cao như những chú chim."
+    },
+    {
+      "en": "To make his dream come true, he trained very hard to become a pilot.",
+      "vi": "Để biến ước mơ thành hiện thực, chú đã tập luyện rất chăm chỉ để trở thành phi công."
+    },
+
+    {
+      "en": "During those years, the sky could be dangerous, but Pham Tuan was brave.",
+      "vi": "Trong những năm ấy, bầu trời có thể rất nguy hiểm, nhưng chú Phạm Tuân rất dũng cảm."
+    },
+    {
+      "en": "Flying his fast MiG-21, he helped protect the skies of Hanoi.",
+      "vi": "Lái chiếc Mích 21 nhanh nhẹn, chú đã góp phần bảo vệ bầu trời Hà Nội."
+    },
+    {
+      "en": "After that, a new adventure called him: The Stars.",
+      "vi": "Sau đó, một cuộc phiêu lưu mới đã gọi tên chú: Những vì sao."
+    },
+
+    {
+      "en": "In 1980, he was chosen for a special mission to go to space with a Russian friend.",
+      "vi": "Năm 1980, chú được chọn cho một nhiệm vụ đặc biệt là bay vào vũ trụ cùng một người bạn Nga."
+    },
+    {
+      "en": "They climbed into a spacecraft called Soyuz 37.",
+      "vi": "Họ bước vào tàu vũ trụ mang tên Soyuz 37."
+    },
+    {
+      "en": "3, 2, 1... Lift off! The rocket roared and flew higher than any airplane.",
+      "vi": "3, 2, 1... Phóng! Tên lửa gầm vang và bay cao hơn bất kỳ chiếc máy bay nào."
+    },
+
+    {
+      "en": "When they reached space, everything became weightless.",
+      "vi": "Khi tới vũ trụ, mọi thứ trở nên không trọng lượng."
+    },
+    {
+      "en": "There was no up and no down. His body felt light, soft, and free.",
+      "vi": "Không còn trên hay dưới. Cơ thể chú trở nên nhẹ nhàng, mềm mại và tự do."
+    },
+    {
+      "en": "With just a tiny push, he slowly floated across the cabin.",
+      "vi": "Chỉ cần khẽ đẩy nhẹ, chú từ từ trôi lơ lửng trong khoang tàu."
+    },
+    {
+      "en": "His arms and legs moved like he was swimming in the air.",
+      "vi": "Tay chân chú cử động như đang bơi trong không khí."
+    },
+    {
+      "en": "Even a pen floated quietly beside him, like a sleepy butterfly.",
+      "vi": "Ngay cả cây bút cũng lơ lửng bên cạnh, như một chú bướm nhỏ buồn ngủ."
+    },
+    {
+      "en": "Everything felt calm, silent, and peaceful in space.",
+      "vi": "Mọi thứ trong vũ trụ đều yên tĩnh, nhẹ nhàng và bình yên."
+    },
+
+    {
+      "en": "Pham Tuan floated in the air like a balloon.",
+      "vi": "Chú Phạm Tuân lơ lửng trong không trung như một quả bóng bay."
+    },
+    {
+      "en": "From the window, he saw Earth as a beautiful blue ball.",
+      "vi": "Từ cửa sổ, chú nhìn thấy Trái Đất là một quả cầu xanh tuyệt đẹp."
+    },
+    {
+      "en": "He looked down and saw the S-shape of Vietnam. He felt so proud.",
+      "vi": "Chú nhìn xuống và thấy hình chữ S của Việt Nam. Chú cảm thấy vô cùng tự hào."
+    },
+
+    {
+      "en": "He even brought a small bag of soil from Ba Dinh Square and a map of Vietnam into space.",
+      "vi": "Chú còn mang theo một ít đất từ Quảng trường Ba Đình và một tấm bản đồ Việt Nam lên vũ trụ."
+    },
+    {
+      "en": "He wanted to bring a piece of home to the stars.",
+      "vi": "Chú muốn mang một phần của quê hương lên các vì sao."
+    },
+    {
+      "en": "That night in space, the spacecraft became very quiet.",
+      "vi": "Đêm ấy trong vũ trụ, con tàu trở nên thật yên tĩnh."
+    },
+    {
+      "en": "Outside the window, the stars twinkled like tiny night-lights.",
+      "vi": "Ngoài cửa sổ, những vì sao lấp lánh như những chiếc đèn ngủ tí hon."
+    },
+    {
+      "en": "The Earth slowly turned below them, blue and gentle.",
+      "vi": "Trái Đất từ từ xoay bên dưới, xanh dịu dàng."
+    },
+    {
+      "en": "Pham Tuan closed his eyes for a moment and listened to the soft hum of the ship.",
+      "vi": "Chú Phạm Tuân khép mắt một chút và lắng nghe tiếng rì rầm êm nhẹ của con tàu."
+    },
+    {
+      "en": "He thought about home, about Hanoi, and about children sleeping safely in warm beds.",
+      "vi": "Chú nghĩ về quê hương, về Hà Nội, và về những em bé đang ngủ yên trong chăn ấm."
+    },
+    {
+      "en": "In that quiet space night, his dream felt real—and also very peaceful.",
+      "vi": "Trong đêm vũ trụ yên ả ấy, ước mơ của chú vừa trở thành thật—vừa thật bình yên."
+    },
+
+    {
+      "en": "After eight days, Pham Tuan returned home as a hero.",
+      "vi": "Sau tám ngày, chú Phạm Tuân trở về nhà như một người hùng."
+    },
+    {
+      "en": "He showed us that a Vietnamese person can do amazing things—even touch the sky.",
+      "vi": "Chú đã chứng minh rằng người Việt Nam có thể làm được những điều kỳ diệu—thậm chí chạm tới bầu trời."
+    },
+    {
+      "en": "Dad whispers softly: Pham Tuan did not become a hero in one day.",
+      "vi": "Bố thì thầm nhẹ nhàng: Chú Phạm Tuân không trở thành người hùng chỉ trong một ngày."
+    },
+    {
+      "en": "He practiced again and again, even when it was hard and tiring.",
+      "vi": "Chú đã luyện tập hết lần này đến lần khác, ngay cả khi rất khó và mệt."
+    },
+    {
+      "en": "That is called perseverance — never giving up.",
+      "vi": "Đó gọi là sự kiên trì — không bao giờ bỏ cuộc."
+    },
+    {
+      "en": "Every day, he followed rules, trained on time, and listened carefully.",
+      "vi": "Mỗi ngày, chú tuân thủ kỷ luật, luyện tập đúng giờ và luôn lắng nghe."
+    },
+    {
+      "en": "That is called discipline — doing the right things every day.",
+      "vi": "Đó gọi là kỷ luật — làm đúng việc mỗi ngày."
+    },
+    {
+      "en": "And most of all, he always kept a dream in his heart — to fly higher and see farther.",
+      "vi": "Và quan trọng nhất, chú luôn giữ một ước mơ trong tim — bay cao hơn và nhìn xa hơn."
+    },
+    {
+      "en": "Dad smiles and says: Small dreams grow big when you are patient and brave.",
+      "vi": "Bố mỉm cười và nói: Ước mơ nhỏ sẽ lớn lên nếu con kiên nhẫn và dũng cảm."
+    },
+
+    {
+      "en": "Dad tucks you in and smiles.",
+      "vi": "Bố đắp chăn cho con và mỉm cười."
+    },
+    {
+      "en": "Remember, my little one. Brave and steady, you can reach your dreams too.",
+      "vi": "Hãy nhớ nhé, bé con. Dũng cảm và bền bỉ, con cũng có thể chạm tới ước mơ của mình."
+    },
+    {
+      "en": "Good night, my future hero.",
+      "vi": "Chúc ngủ ngon, người hùng tương lai của bố."
+    }
+  ]     
 };
