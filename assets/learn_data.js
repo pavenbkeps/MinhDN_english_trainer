@@ -33,32 +33,69 @@ window.LEARN_DATA = {
       1. ADVERBS – TRẠNG TỪ
       ========================= */
     "Adverbs Trạng từ": {
-      title: "Adverbs of Frequency (Trạng từ chỉ tần suất)",
-      summary: "Những từ chỉ mức độ <b>thường xuyên</b> bạn làm một việc gì đó 📅.",
-      points: [
-        "✅ Trạng từ tần suất trả lời câu hỏi: <b>How often...?</b> (Bao lâu một lần?)",
-        "<b>Always</b> (Luôn luôn): 100% (every day)",
-        "<b>Usually</b> (Thường thường): ~80%",
-        "<b>Often</b> (Thường xuyên): ~70%",
-        "<b>Sometimes</b> (Thỉnh thoảng): ~50%",
-        "<b>Rarely</b> (Hiếm khi): ~10%",
-        "<b>Never</b> (Không bao giờ): 0%",
-        "📍 Vị trí: <b>Before</b> verb thường (I <b>often</b> play) / <b>After</b> 'to be' (I am <b>never</b> late)"
+      "title": "Adverbs (Trạng từ): Frequency, Degree & Manner",
+      "summary": "Trạng từ giúp miêu tả <b>bao lâu một lần</b> (Frequency), <b>mức độ</b> (Degree) và <b>làm việc đó như thế nào</b> (Manner) 🧠.",
+      "points": [
+        "✅ <b>Định nghĩa:</b> Trạng từ bổ sung ý nghĩa cho động từ, tính từ hoặc cả câu.",
+        "==============================",
+        "<b>1) Adverbs of Frequency</b> (Tần suất) – trả lời: <b>How often?</b>",
+        "• <b>Always</b> (Luôn luôn): 100%  |  • <b>Usually</b> (Thường thường): ~80%",
+        "• <b>Often</b> (Thường xuyên): ~70%  |  • <b>Sometimes</b> (Thỉnh thoảng): ~50%",
+        "• <b>Rarely</b> (Hiếm khi): ~10%  |  • <b>Never</b> (Không bao giờ): 0%",
+        "📍 <b>Vị trí (Rất quan trọng):</b>",
+        "   - Đứng <b>SAU</b> động từ To Be: (I <b>am always</b> happy).",
+        "   - Đứng <b>TRƯỚC</b> động từ thường: (I <b>often go</b> to school).",
+        "==============================",
+        "<b>2) Adverbs of Manner</b> (Cách thức) – trả lời: <b>How?</b> (Làm thế nào?)",
+        "📝 Công thức chung: <b>Tính từ + ly = Trạng từ</b>",
+        "   - Slow → Slowly (chậm chạp)",
+        "   - Careful → Carefully (cẩn thận)",
+        "   - Happy → Happily (đổi 'y' thành 'i')",
+        "⚠️ <b>Bất quy tắc (Phải nhớ để không bị bẫy):</b>",
+        "   - Good → <b>Well</b> (Tốt/Giỏi)",
+        "   - Fast → <b>Fast</b> (Nhanh - KHÔNG có fastly)",
+        "   - Hard → <b>Hard</b> (Chăm chỉ/Vất vả)",
+        "   - Late → <b>Late</b> (Trễ)",
+        "==============================",
+        "<b>3) Adverbs of Degree</b> (Mức độ) – nói về độ mạnh/yếu.",
+        "• <b>Very</b> = rất (tích cực): <i>very good</i>",
+        "• <b>Too</b> = quá (tiêu cực, không làm được): <i>too hot to eat</i>",
+        "• <b>So</b> = quá/rất (nhấn mạnh cảm xúc): <i>so happy!</i>",
+        "• <b>Almost</b> = gần như (sắp đạt được): <i>almost finished</i>",
+        "• <b>Quite</b> = khá (mức độ vừa phải): <i>quite easy</i>",
+        "==============================",
+        "⭐ <b>MẸO LÀM BÀI SIÊU NHANH (5 RULES)</b> ⭐",
+        "1️⃣ Thấy <b>to + V</b> đằng sau → chọn <b>Too</b> (Too... to...).",
+        "2️⃣ Thấy động từ chỉ giác quan (<b>Look, Taste, Smell, Sound, Feel</b>) hoặc <b>To Be</b> → chọn <b>TÍNH TỪ</b>.",
+        "   (Ex: You look <b>happy</b>. / The soup tastes <b>good</b>).",
+        "3️⃣ Thấy <b>động từ thường</b> (run, sing, dance, learn) → chọn <b>TRẠNG TỪ</b>.",
+        "   (Ex: He runs <b>fast</b>. / She sings <b>beautifully</b>).",
+        "4️⃣ Muốn nói 'gần xong/gần hết' → chọn <b>Almost</b>.",
+        "5️⃣ Muốn nhấn mạnh cảm xúc (!) → chọn <b>So</b>."
       ],
-      examples: [
-        { en: "I <b>always</b> brush my teeth before bed.", vi: "Tớ <i>luôn luôn</i> đánh răng trước khi đi ngủ." },
-        { en: "My dad <b>rarely</b> cooks dinner.", vi: "Bố tớ <i>hiếm khi</i> nấu bữa tối." },
-        { en: "He <b>sometimes</b> plays football on Sundays.", vi: "Cậu ấy <i>thỉnh thoảng</i> chơi bóng đá vào Chủ nhật." },
-        { en: "We are <b>never</b> late for school.", vi: "Chúng tớ <i>không bao giờ</i> đi học muộn." }
+      "examples": [
+        { "en": "I <b>always</b> go to school on time.", "vi": "Tớ <i>luôn luôn</i> đi học đúng giờ. (Tần suất)" },
+        { "en": "He runs very <b>fast</b>. He is a <b>fast</b> runner.", "vi": "Cậu ấy chạy rất <i>nhanh</i>. (Trạng từ đặc biệt)" },
+        { "en": "She sings <b>beautifully</b>.", "vi": "Cô ấy hát <i>hay</i>. (Động từ thường 'sings' + Trạng từ)" },
+        { "en": "The soup tastes <b>good</b>.", "vi": "Món súp nếm <i>ngon</i>. (Động từ 'tastes' + Tính từ)" },
+        { "en": "The bag is <b>too</b> heavy for me to carry.", "vi": "Cái túi <i>quá</i> nặng tớ không mang nổi. (Cấu trúc Too...to)" },
+        { "en": "I am <b>almost</b> ready.", "vi": "Tớ <i>gần như</i> sẵn sàng rồi." }
       ],
-      links: [
+      "links": [
         {
-          label: "▶ YouTube: Adverbs of Frequency Song",
-          url: "https://www.youtube.com/results?search_query=adverbs+of+frequency+song+for+kids"
+          "label": "▶ YouTube: Adverbs of Frequency Song",
+          "url": "https://www.youtube.com/results?search_query=adverbs+of+frequency+song+for+kids"
+        },
+        {
+          "label": "▶ YouTube: Adverbs vs Adjectives (Good vs Well)",
+          "url": "https://www.youtube.com/results?search_query=adverbs+and+adjectives+song+for+kids"
+        },
+        {
+          "label": "▶ YouTube: Very / Too / So / Quite",
+          "url": "https://www.youtube.com/results?search_query=very+too+so+quite+grammar"
         }
       ]
     },
-
     /* =========================
       2. COMPARISON – SO SÁNH
       ========================= */
