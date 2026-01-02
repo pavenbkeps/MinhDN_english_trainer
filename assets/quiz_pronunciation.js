@@ -163,8 +163,8 @@ window.Pronunciation = (function(){
     root.innerHTML = `
       <div class="quiz-wrap">
         <div class="quiz-head">
-          <div class="quiz-title">🔊 <span id="prTitle"></span></div>
           <div class="quiz-progress" id="prProg"></div>
+          <span id="prTitle" style="display:none"></span>          
         </div>
 
         <div class="quiz-body">
@@ -227,12 +227,11 @@ window.Pronunciation = (function(){
     root.innerHTML = `
       <div class="quiz-wrap">
         <div class="quiz-head">
-          <div class="quiz-title">🔊 <span id="prTitle"></span></div>
           <div class="quiz-progress" id="prProg"></div>
+          <span id="prTitle" style="display:none"></span>
         </div>
 
         <div class="quiz-body">
-          <div class="big-emoji">🔊</div>
 
           <div class="qtext" id="prPrompt"></div>
           <div class="hint" id="prTarget"></div>
