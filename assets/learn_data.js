@@ -300,28 +300,34 @@ window.LEARN_DATA = {
       ========================= */
     "Quantifiers Lượng từ": {
       title: "Quantifiers (Từ chỉ số lượng)",
-      summary: "Cách hỏi và nói về số lượng: <b>nhiều</b> hay <b>ít</b> 🍎.",
+      summary: "Bí kíp đếm mọi thứ: Từ quả táo 🍎, hạt gạo 🍚 đến cảm xúc vui buồn 🙂☹️.",
       points: [
-        "✅ <b>How many</b> dùng cho danh từ đếm được: books, apples, pencils",
-        "✅ <b>How much</b> dùng cho danh từ không đếm được: water, milk, money",
-        "✅ <b>Some</b>: câu khẳng định / lời mời (I have some candy. / Would you like some?)",
-        "✅ <b>Any</b>: câu hỏi & phủ định (Do you have any milk? / I don't have any milk.)",
-        "💡 Mẹo nhỏ: Nếu đếm được (1,2,3...) → <b>many</b>; không đếm được → <b>much</b>"
+        "1️⃣ <b>A / An (Một cái):</b><br>• Dùng <b>AN</b> trước các từ bắt đầu bằng: <b>u, e, o, a, i</b> (Mẹo nhớ: <b>UỂ OẢI</b>).<br>• Còn lại dùng <b>A</b> (A book, A cat).",
+        
+        "2️⃣ <b>Many & Much (Nhiều):</b><br>• <b>Many</b> + Đếm được (Mẹo: Từ có đuôi <b>'s'</b> hoặc <b>'es'</b>).<br>• <b>Much</b> + Không đếm được (nước, tiền, đường...).",
+
+        "3️⃣ <b>Some & Any (Một ít/Vài):</b><br>• <b>Some</b>: Câu Khẳng định (+) & Lời mời <i>(Would you like some...?)</i>.<br>• <b>Any</b>: Câu Phủ định (-) & Câu hỏi (?).",
+
+        "4️⃣ <b>Cặp đôi 'Cảm xúc': (A) Few & (A) Little</b><br>• <b>A few / A little</b> (Có chữ A): Có một chút, đủ dùng → 🙂 <b>Vui (Positive)</b>.<br>• <b>Few / Little</b> (Mất chữ A): Quá ít, thiếu thốn → ☹️ <b>Buồn (Negative)</b>.<br><i>*Lưu ý: Few (đếm được), Little (không đếm được).</i>",
+
+        "5️⃣ <b>Đơn vị đo lường (Partitives):</b><br>• A <b>bar</b> of chocolate (thanh) 🍫 | A <b>carton</b> of milk (hộp giấy) 🥛<br>• A <b>bunch</b> of bananas (nải/chùm) 🍌 | A <b>bowl</b> of rice (bát) 🍚<br>• A <b>packet</b> of biscuits (gói) 🍪 | A <b>tube</b> of toothpaste (tuýp) 🦷",
+
+        "🌟 <b>Mẹo Nâng Cao (Xuất hiện trong bài thi):</b><br>• <b>Parents</b> (Bố mẹ) là 2 người → Luôn chọn <b>Both</b> (Cả hai).<br>• <b>Every</b> (Mỗi) + Danh từ số ít (Ví dụ: <i>Every student</i>)."
       ],
       examples: [
-        { en: "<b>How many</b> pencils do you have?", vi: "Bạn có <i>bao nhiêu</i> chiếc bút chì?" },
-        { en: "I would like <b>some</b> water, please.", vi: "Cho tớ xin <i>một ít</i> nước nhé." },
-        { en: "There isn't <b>any</b> juice in the fridge.", vi: "Không còn <i>chút</i> nước ép nào trong tủ lạnh cả." },
-        { en: "Do you have <b>any</b> cookies?", vi: "Bạn có <i>cái bánh</i> nào không?" }
+        { en: "I eat <b>an</b> apple.", vi: "Tớ ăn một quả táo. (Apple thuộc nhóm Uể Oải -> An)" },
+        { en: "I have <b>a few</b> friends.", vi: "Tớ có vài người bạn. (Có bạn là vui -> A few)" },
+        { en: "He has <b>little</b> money.", vi: "Anh ấy có rất ít tiền. (Không đủ tiêu -> Buồn -> Little)" },
+        { en: "<b>Both</b> of my parents work at home.", vi: "Cả bố và mẹ tớ đều làm việc ở nhà. (2 người -> Both)" },
+        { en: "A <b>bar</b> of chocolate.", vi: "Một thanh sô-cô-la." }
       ],
       links: [
         {
-          label: "▶ YouTube: Some and Any / Much and Many",
-          url: "https://www.youtube.com/results?search_query=quantifiers+for+kids+grammar"
+          label: "▶ Video: Phân biệt Few và A Few (Dễ hiểu cho bé)",
+          url: "https://www.youtube.com/results?search_query=few+vs+a+few+little+vs+a+little+for+kids"
         }
       ]
-    },
-
+    },    
     /* =========================
       10. TELLING TIME – THỜI GIAN
       ========================= */
