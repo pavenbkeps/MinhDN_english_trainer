@@ -1,9 +1,296 @@
 window.UI = (function(){
   const el = (id)=>document.getElementById(id);
 
+  // ==========================
+  // ✅ Reusable Level Selector (Easy/Core/Hard/All)
+  // - Multi-select levels 1/2/3
+  // - All is derived (active when 1+2+3 selected)
+  // - If empty => auto reset to All
+  // - Optional localStorage persistence by key
+  // ==========================
+  const LEVEL_ALL = [1,2,3];
+
+  function _normalizeLevelSet(levelSet){
+    if(!(levelSet instanceof Set) || levelSet.size === 0){
+      return new Set(LEVEL_ALL);
+    }
+    const clean = new Set();
+    for(const v of levelSet){
+      const n = Number(v);
+      if(n === 1 || n === 2 || n === 3) clean.add(n);
+    }
+    return clean.size ? clean : new Set(LEVEL_ALL);
+  }
+
+  function _isAllSelected(levelSet){
+    return levelSet.size === 3 && LEVEL_ALL.every(v => levelSet.has(v));
+  }
+
+  function createLevelSelector({
+    defaultSelected = new Set(LEVEL_ALL),
+    onChange,
+    labels = { easy:"Easy", core:"Core", hard:"Hard", all:"All" },
+    storageKey = null
+  } = {}){
+    let selected = _normalizeLevelSet(defaultSelected);
+
+    if(storageKey){
+      try{
+        const raw = localStorage.getItem(storageKey);
+        if(raw){
+          const arr = JSON.parse(raw);
+          if(Array.isArray(arr)) selected = _normalizeLevelSet(new Set(arr));
+        }
+      }catch(_){}
+    }
+
+    const wrap = document.createElement("div");
+    wrap.style.display = "flex";
+    wrap.style.gap = "8px";
+    wrap.style.flexWrap = "wrap";
+    wrap.style.alignItems = "center";
+    wrap.style.margin = "10px 0";
+
+    function mkBtn(text){
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn ghost";
+      b.textContent = text;
+      b.style.padding = "8px 12px";
+      b.style.borderRadius = "999px";
+      b.style.fontWeight = "700";
+      return b;
+    }
+
+    const btnEasy = mkBtn(labels.easy);
+    const btnCore = mkBtn(labels.core);
+    const btnHard = mkBtn(labels.hard);
+    const btnAll  = mkBtn(labels.all);
+
+    function setActive(btn, active){
+      btn.style.opacity = active ? "1" : "0.6";
+      btn.style.transform = active ? "translateY(0px)" : "translateY(0px)";
+      btn.dataset.active = active ? "1" : "0";
+    }
+    function setDim(btn, dim){
+      btn.style.opacity = dim ? "0.45" : "1";
+    }
+    function persist(){
+      if(!storageKey) return;
+      try{
+        localStorage.setItem(storageKey, JSON.stringify(Array.from(selected)));
+      }catch(_){}
+    }
+    function emit(){
+      persist();
+      if(typeof onChange === "function") onChange(new Set(selected));
+    }
+    function render(){
+      setActive(btnEasy, selected.has(1));
+      setActive(btnCore, selected.has(2));
+      setActive(btnHard, selected.has(3));
+
+      const allOn = _isAllSelected(selected);
+      setActive(btnAll, allOn);
+      setDim(btnAll, !allOn); // All mờ khi chưa chọn đủ 1+2+3
+    }
+    function toggle(level){
+      if(selected.has(level)) selected.delete(level);
+      else selected.add(level);
+
+      // nếu bỏ hết => quay về All
+      selected = _normalizeLevelSet(selected);
+      render();
+      emit();
+    }
+
+    btnEasy.onclick = ()=>toggle(1);
+    btnCore.onclick = ()=>toggle(2);
+    btnHard.onclick = ()=>toggle(3);
+
+    // All là reset về full
+    btnAll.onclick = ()=>{
+      selected = new Set(LEVEL_ALL);
+      render();
+      emit();
+    };
+
+    wrap.appendChild(btnEasy);
+    wrap.appendChild(btnCore);
+    wrap.appendChild(btnHard);
+    wrap.appendChild(btnAll);
+
+    render();
+    emit();
+
+    return {
+      el: wrap,
+      getSelected: ()=>new Set(selected),
+      setSelected: (newSet)=>{
+        selected = _normalizeLevelSet(newSet);
+        render();
+        emit();
+      }
+    };
+  }
+
+  // ==========================
+  // ✅ Compact Level Pills (1/2/3/A)
+  // - Designed for topic cards (Home)
+  // - storageKey compatible with createLevelSelector
+  // - A = All (1+2+3)
+  // - Clicking pills won't trigger parent card click (stopPropagation in caller if needed)
+  // ==========================
+  function createLevelPillsCompact({
+    storageKey,
+    onChange
+  } = {}){
+    const KEY = storageKey || null;
+
+    function load(){
+      try{
+        if(!KEY) return new Set(LEVEL_ALL);
+        const raw = localStorage.getItem(KEY);
+        if(!raw) return new Set(LEVEL_ALL); // default All
+        const arr = JSON.parse(raw);
+        if(!Array.isArray(arr)) return new Set(LEVEL_ALL);
+        const s = _normalizeLevelSet(new Set(arr));
+        return s;
+      }catch(_){
+        return new Set(LEVEL_ALL);
+      }
+    }
+
+    function save(set){
+      if(!KEY) return;
+      try{ localStorage.setItem(KEY, JSON.stringify(Array.from(set))); }catch(_){}
+    }
+
+    let selected = load();
+
+    // inject CSS once
+    if(!document.getElementById("lvlPillsCss")){
+      const st = document.createElement("style");
+      st.id = "lvlPillsCss";
+      st.textContent = `
+        .lvl-pills{display:flex; gap:8px; align-items:center; justify-content:flex-end;}
+        .lvl-pill{
+          width:30px; height:30px; border-radius:10px;
+          display:flex; align-items:center; justify-content:center;
+          font-weight:900; cursor:pointer; user-select:none;
+          border:1px solid rgba(229,231,235,.95);
+          background:rgba(17,24,39,.04);
+        }
+        .lvl-pill.on{
+          background:rgba(59,130,246,.14);
+          border-color:rgba(59,130,246,.35);
+        }
+        .lvl-pill:active{transform:scale(.98);}
+      `;
+      document.head.appendChild(st);
+    }
+
+    const wrap = document.createElement("div");
+    wrap.className = "lvl-pills";
+
+    function emit(){
+      save(selected);
+      if(typeof onChange === "function") onChange(new Set(selected));
+    }
+
+    function render(){
+      wrap.innerHTML = "";
+
+      const mk = (label)=>{
+        const b = document.createElement("div");
+        b.className = "lvl-pill";
+        b.textContent = label;
+        return b;
+      };
+
+      const b1 = mk("1");
+      const b2 = mk("2");
+      const b3 = mk("3");
+      const bA = mk("A");
+
+      const allOn = _isAllSelected(selected);
+
+      if(selected.has(1)) b1.classList.add("on");
+      if(selected.has(2)) b2.classList.add("on");
+      if(selected.has(3)) b3.classList.add("on");
+      if(allOn) bA.classList.add("on");
+
+      function toggle(n){
+        // Nếu đang All mà bấm 1/2/3 => chuyển sang chỉ còn level đó (nhanh, đúng UX)
+        if(allOn){
+          selected = new Set([n]);
+          render();
+          emit();
+          return;
+        }
+
+        if(selected.has(n)) selected.delete(n);
+        else selected.add(n);
+
+        // Không cho rỗng => auto All
+        selected = _normalizeLevelSet(selected);
+
+        // Nếu đủ 1+2+3 => All sáng tự động
+        if(selected.has(1) && selected.has(2) && selected.has(3)){
+          selected = new Set(LEVEL_ALL);
+        }
+
+        render();
+        emit();
+      }
+
+      // stopPropagation để bấm pill không mở topic card
+      b1.onclick = (e)=>{ e.stopPropagation(); toggle(1); };
+      b2.onclick = (e)=>{ e.stopPropagation(); toggle(2); };
+      b3.onclick = (e)=>{ e.stopPropagation(); toggle(3); };
+
+      // A = reset All
+      bA.onclick = (e)=>{
+        e.stopPropagation();
+        selected = new Set(LEVEL_ALL);
+        render();
+        emit();
+      };
+
+      wrap.append(b1,b2,b3,bA);
+    }
+
+    render();
+    emit();
+
+    return {
+      el: wrap,
+      getSelected: ()=>new Set(selected),
+      setSelected: (newSet)=>{
+        selected = _normalizeLevelSet(newSet);
+        render();
+        emit();
+      },
+      setAll: ()=>{
+        selected = new Set(LEVEL_ALL);
+        render();
+        emit();
+      }
+    };
+  }
+
   function showScreen(name){
-    // ✅ Add screenBedtime to the list (doesn't affect existing screens)
-    const screens = ["screenHome","screenSpeaking","screenGrammar","screenPronunciation","screenVocabulary","screenReading","screenBedtime"];
+    // ✅ Add screenMath to the list (doesn't affect existing screens)
+    const screens = [
+      "screenHome",
+      "screenSpeaking",
+      "screenGrammar",
+      "screenPronunciation",
+      "screenVocabulary",
+      "screenReading",
+      "screenMath",     // ✅ NEW
+      "screenBedtime"
+    ];
     for(const s of screens){
       const node = el(s);
       if(node) node.hidden = (s !== name);
@@ -36,8 +323,7 @@ window.UI = (function(){
     const totalPron  = counts?.pronunciation?.["Tổng hợp"] ?? 0;
     const totalVocab = counts?.vocabulary?.["Tổng hợp"] ?? 0;
     const totalReading = counts?.reading?.["Tổng hợp"] ?? 0;
-
-    // ✅ NEW: Bedtime total
+    const totalMath = counts?.math?.["Tổng hợp"] ?? 0;           // ✅ NEW
     const totalBedtime = counts?.bedtime?.["Tổng hợp"] ?? 0;
 
     const hero = document.createElement("div");
@@ -53,6 +339,7 @@ window.UI = (function(){
           <div class="chip">🔊 Pronunciation <span class="chip-num">${totalPron}</span></div>
           <div class="chip">📖 Vocabulary <span class="chip-num">${totalVocab}</span></div>
           <div class="chip">📘 Reading <span class="chip-num">${totalReading}</span></div>
+          <div class="chip">🧮 Math <span class="chip-num">${totalMath}</span></div>
           <div class="chip">🌙 Bedtime <span class="chip-num">${totalBedtime}</span></div>
         </div>
 
@@ -68,15 +355,21 @@ window.UI = (function(){
     pronunciationTopics = [],
     vocabularyTopics = [],
     readingTopics = [],
-    bedtimeTopics = [],              // ✅ NEW
+    mathTopics = [],                     // ✅ NEW
+    bedtimeTopics = [],
     counts,
     onStartSpeaking,
     onStartGrammar,
-    onLearnGrammar,     // ✅ thêm dòng này
+    onLearnGrammar,
     onStartPronunciation,
     onStartVocabulary,
     onStartReading,
-    onStartBedtime                 // ✅ NEW
+
+    // ✅ NEW: Math callbacks
+    onOpenMathTopic,
+    onLearnMath,
+
+    onStartBedtime
   }){
     const home = el("screenHome");
     home.innerHTML = "";
@@ -147,12 +440,8 @@ window.UI = (function(){
           <button class="btn ghost half" data-learn="1">Learn</button>
         </div>
       `;
-      const btnStart = card.querySelector("button.btn.purple");
-      btnStart.onclick = ()=>onStartGrammar(t);
-
-      const btnLearn = card.querySelector('button[data-learn="1"]');
-      btnLearn.onclick = ()=>onLearnGrammar && onLearnGrammar(t);
-
+      card.querySelector("button.btn.purple").onclick = ()=>onStartGrammar(t);
+      card.querySelector('button[data-learn="1"]').onclick = ()=>onLearnGrammar && onLearnGrammar(t);
       gridGrammar.appendChild(card);
     }
 
@@ -258,7 +547,46 @@ window.UI = (function(){
       }
     }
 
-    /* ===== Bedtime / Story (NEW) ===== */
+    /* ===== Math (NEW) ===== */
+    if(mathTopics && mathTopics.length && typeof onOpenMathTopic === "function"){
+      const mSection = document.createElement("div");
+      mSection.className = "section";
+      mSection.id = "secMath";
+      mSection.innerHTML = `
+        <div class="section-head">
+          <div class="section-title">🧮 Math (in English)</div>
+          <div class="section-sub">Learn → choose level → Start (with pictures + KaTeX)</div>
+        </div>
+        <div class="grid" id="gridMath"></div>
+      `;
+      home.appendChild(mSection);
+
+      const gridMath = mSection.querySelector("#gridMath");
+      for(const t of mathTopics){
+        const c = counts.math?.[t] ?? 0;
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="card-top">
+            <div>
+              <div class="card-title">${escapeHtml(t)}</div>
+              <div class="card-count">${c} questions</div>
+            </div>
+            <div class="card-icon">🧮</div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn blue half">Start</button>
+            <button class="btn ghost half" data-learn="1">Learn</button>
+          </div>
+        `;
+        card.querySelector("button.btn.blue").onclick = ()=>onOpenMathTopic(t);
+        card.querySelector('button[data-learn="1"]').onclick = ()=>onLearnMath && onLearnMath(t);
+        gridMath.appendChild(card);
+      }
+    }
+
+    /* ===== Bedtime / Story ===== */
     if(bedtimeTopics && bedtimeTopics.length && typeof onStartBedtime === "function"){
       const bSection = document.createElement("div");
       bSection.className = "section";
@@ -330,8 +658,8 @@ window.UI = (function(){
     const chips = home.querySelectorAll(".hero .chip");
     if(!chips || chips.length < 1) return;
 
-    // ✅ Updated chip map to include Bedtime as the 6th chip
-    const map = ["secSpeaking","secGrammar","secPronunciation","secVocabulary","secReading","secBedtime"];
+    // ✅ Updated chip map: add Math before Bedtime
+    const map = ["secSpeaking","secGrammar","secPronunciation","secVocabulary","secReading","secMath","secBedtime"];
     chips.forEach((chip, i)=>{
       const target = map[i];
       if(!target) return;
@@ -366,5 +694,15 @@ window.UI = (function(){
 
   bindTopbarBrandHome();
 
-  return {showScreen, setLoading, renderHome, el};
+  return {
+    showScreen,
+    setLoading,
+    renderHome,
+    el,
+
+    // ✅ NEW export (future-proof for Grammar/Reading later)
+    createLevelSelector,
+    createLevelPillsCompact, // ✅ NEW
+    LEVEL_ALL
+  };
 })();

@@ -87,8 +87,6 @@ window.Data = (function(){
     return items;
   }
 
-
-
   function parseGrammar(csvText){
     const rows = csvText.split(/\r?\n/).filter(Boolean);
     let start = 0;
@@ -138,21 +136,12 @@ window.Data = (function(){
       };
       if(!item.topic || !item.type || !item.prompt) continue;
 
-      // --- Validation / normalization ---
-      // Sheet "Pronunciation" currently uses two patterns:
-      // 1) Most types: correct = A/B/C/D (letter)
-      // 2) minimal_pair: correct = the correct WORD (not the letter)
-
-      // Minimal pair may only have A/B
       const hasC = !!item.C;
       const hasD = !!item.D;
 
-      // Always require at least A/B
       if(!item.A || !item.B) continue;
 
       if((item.type || "").toLowerCase() === "minimal_pair"){
-        // If Correct column is already A/B, keep it.
-        // Otherwise treat it as the correct WORD to be spoken.
         const raw = (item.correct || "").toString().trim();
         const upper = raw.toUpperCase();
         if(["A","B"].includes(upper)){
@@ -160,7 +149,6 @@ window.Data = (function(){
           item.correct_word = (item[upper] || "").toString();
         }else{
           item.correct_word = raw;
-          // Map the correct WORD to a letter by matching against options.
           const norm = (s)=> (s||"").toString().replace(/\([^)]*\)/g, "").trim().toLowerCase();
           const cw = norm(raw);
           const candidates = [
@@ -168,14 +156,13 @@ window.Data = (function(){
             ["B", item.B],
           ];
           const hit = candidates.find(([_, t]) => norm(t) === cw);
-          if(!hit) continue; // can't determine which option is correct
+          if(!hit) continue;
           item.correct = hit[0];
         }
         items.push(item);
         continue;
       }
 
-      // Other types: keep existing strict validation
       const validABCD = ["A","B","C","D"].includes(item.correct);
       const validAB = ["A","B"].includes(item.correct);
       if((hasC || hasD)){
@@ -247,6 +234,55 @@ window.Data = (function(){
     return items;
   }
 
+  // ✅ Math (MCQ + Level + Image + LaTeX-ready)
+  // Sheet columns (YOUR CURRENT SHEET):
+  // Topic, Question, A, B, C, D, Correct, Explain, Image, Level
+  function parseMath(csvText){
+    const rows = splitCSVRows(csvText).filter(r => r.trim().length);
+    let start = 0;
+    if(rows[0] && rows[0].toLowerCase().includes("topic")) start = 1;
+
+    const items = [];
+    let lastTopic = "";
+    let lastImageKey = "";
+
+    for(let i=start;i<rows.length;i++){
+      const cols = smartSplitCSVLine(rows[i]);
+      if(cols.length < 8) continue;
+
+      const topic    = stripQuotes(cols[0]);
+      const question = stripQuotes(cols[1]);
+      const A        = stripQuotes(cols[2]);
+      const B        = stripQuotes(cols[3]);
+      const C        = stripQuotes(cols[4]);
+      const D        = stripQuotes(cols[5]);
+      const correct  = stripQuotes(cols[6]).toUpperCase();
+      const explain  = stripQuotes(cols[7] || "");
+      let image      = stripQuotes(cols[8] || "");
+      const levelRaw = stripQuotes(cols[9] || "");
+
+      if(!topic || !question) continue;
+      if(!["A","B","C","D"].includes(correct)) continue;
+
+      let level = parseInt(levelRaw, 10);
+      if(![1,2,3].includes(level)) level = 2;
+
+      // Optional: fill-down image per topic (đỡ phải nhập lặp)
+      if(topic !== lastTopic){
+        lastTopic = topic;
+        lastImageKey = "";
+      }
+      if(image){
+        lastImageKey = image;
+      }else{
+        image = lastImageKey;
+      }
+
+      items.push({ topic, level, question, A, B, C, D, correct, explain, image });
+    }
+    return items;
+  }
+
   function topicsWithAll(items){
     const topics = Array.from(new Set(items.map(x=>x.topic).filter(Boolean)));
     return ["Tổng hợp", ...topics.filter(t=>t!=="Tổng hợp")];
@@ -257,5 +293,15 @@ window.Data = (function(){
     return items.filter(x=>x.topic === topic);
   }
 
-  return {fetchCSV, parseSpeaking, parseGrammar, parsePronunciation, parseVocabulary, parseReading, topicsWithAll, filterByTopic};
+  return {
+    fetchCSV,
+    parseSpeaking,
+    parseGrammar,
+    parsePronunciation,
+    parseVocabulary,
+    parseReading,
+    parseMath,           // ✅ NEW
+    topicsWithAll,
+    filterByTopic
+  };
 })();

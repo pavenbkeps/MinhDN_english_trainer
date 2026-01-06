@@ -8,10 +8,14 @@
   <link rel="icon" href="./favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="./icon-192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <!-- ✅ NEW: KaTeX (for Math LaTeX rendering) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 </head>
 <body>
   <header class="topbar">
-    <!-- ✅ Added id/role/tabindex to make whole brand area clickable -->
     <div class="brand" id="topbarBrand" role="button" tabindex="0" title="Home">
       <div class="brand-mark">🎧</div>
       <div class="brand-text">
@@ -35,7 +39,10 @@
     <section id="screenVocabulary" class="screen" hidden></section>
     <section id="screenReading" class="screen" hidden></section>
 
-    <!-- ✅ NEW: Bedtime / Story -->
+    <!-- ✅ NEW: Math -->
+    <section id="screenMath" class="screen" hidden></section>
+
+    <!-- ✅ Bedtime / Story -->
     <section id="screenBedtime" class="screen" hidden></section>
   </main>
 
@@ -43,18 +50,20 @@
   <script src="./assets/config.js"></script>
   <script src="./assets/data.js"></script>
 
-  <!-- ✅ NEW: Bedtime bilingual data (you created this file) -->
   <script src="./assets/bedtime_data.js"></script>
 
   <script src="./assets/tts.js"></script>
   <script src="./assets/ui.js"></script>
+
   <script src="./assets/quiz_speaking.js"></script>
   <script src="./assets/quiz_grammar.js"></script>
   <script src="./assets/quiz_pronunciation.js"></script>
   <script src="./assets/quiz_vocabulary.js"></script>
   <script src="./assets/quiz_reading.js"></script>
 
-  <!-- ✅ NEW: Bedtime module player -->
+  <!-- ✅ NEW: Math module -->
+  <script src="./assets/quiz_math.js"></script>
+
   <script src="./assets/quiz_bedtime.js"></script>
 
   <script src="assets/learn_data.js"></script>
