@@ -412,5 +412,60 @@ window.LEARN_DATA = {
         }
       ]
     }
+  },
+  // LEARN math
+  math: {
+    "Fractions Phân số": {
+      title: "Fractions (Phân số) – Parts of a Whole",
+      summary: "Phân số giúp con hiểu <b>một phần của một cái toàn thể</b> (a part of a whole) 🍕. Học theo cách <b>nhìn hình → hiểu ý → mới tính</b>.",
+      points: [
+        "✅ <b>1) Fraction là gì?</b>",
+        "Một phân số cho biết: ta lấy <b>mấy phần</b> trong tổng số <b>các phần bằng nhau</b> của 1 cái toàn thể.",
+        "Ví dụ: Pizza chia 4 phần bằng nhau, ăn 1 phần → <b>1/4</b>.",
+        "==============================",
+        "✅ <b>2) Numerator & Denominator</b>",
+        "<b>Numerator</b> (tử số) = số ở <b>trên</b> → <b>mình lấy bao nhiêu phần</b>.",
+        "<b>Denominator</b> (mẫu số) = số ở <b>dưới</b> → <b>cả cái chia thành bao nhiêu phần bằng nhau</b>.",
+        "Ví dụ: <b>3/5</b> nghĩa là lấy 3 phần trong 5 phần bằng nhau.",
+        "==============================",
+        "✅ <b>3) Quy tắc quan trọng nhất</b>",
+        "⚠️ Các phần phải <b>bằng nhau</b> thì mới gọi là phân số. (Parts must be <b>equal</b>.)",
+        "Nếu chia không đều (phần to, phần nhỏ) → <b>không dùng phân số</b> kiểu đó.",
+        "==============================",
+        "✅ <b>4) Mẫu số lớn hơn có phải lớn hơn không?</b>",
+        "❌ Không. Mẫu số càng lớn → chia càng nhiều phần → <b>mỗi phần càng nhỏ</b>.",
+        "Vì vậy: <b>1/2 > 1/4</b> (một nửa lớn hơn một phần tư).",
+        "==============================",
+        "✅ <b>5) Fractions bằng nhau (Equivalent Fractions)</b>",
+        "Một lượng có thể viết bằng nhiều phân số khác nhau.",
+        "Ví dụ: <b>1/2 = 2/4 = 3/6</b> (cùng là “một nửa”).",
+        "📌 Mẹo hiểu nhanh: Nếu <b>nhân</b> (hoặc <b>chia</b>) <b>cả tử và mẫu</b> với cùng một số → giá trị phân số <b>không đổi</b>.",
+        "==============================",
+        "✅ <b>6) Fractions trên trục số (Number line)</b>",
+        "Phân số cũng là <b>số</b>, nằm giữa 0 và 1 (hoặc lớn hơn 1).",
+        "Ví dụ: 0 ─ 1/4 ─ 1/2 ─ 3/4 ─ 1",
+        "==============================",
+        "⭐ <b>MINI PRACTICE (có đáp án)</b>",
+        "1) Half of 10 is <b>5</b>. (Một nửa của 10 là 5.)",
+        "2) One quarter of 12 is <b>3</b>. (Một phần tư của 12 là 3.)",
+        "⭐ <b>SMART TIP</b>: Nếu <b>tử số = mẫu số</b> (ví dụ 4/4) → bằng <b>1 whole</b> (một cái trọn vẹn)."
+      ],
+      examples: [
+        { en: "A fraction shows a part of a whole.", vi: "Phân số cho biết một phần của một cái toàn thể." },
+        { en: "In 3/5, 3 is the numerator and 5 is the denominator.", vi: "Trong 3/5, 3 là tử số và 5 là mẫu số." },
+        { en: "1/2 is bigger than 1/4.", vi: "1/2 lớn hơn 1/4." },
+        { en: "1/2 = 2/4 (equivalent fractions).", vi: "1/2 = 2/4 (các phân số bằng nhau)." }
+      ],
+      links: [
+        {
+          label: "▶ YouTube: Fractions for Kids (visual)",
+          url: "https://www.youtube.com/results?search_query=fractions+for+kids+visual"
+        },
+        {
+          label: "▶ YouTube: Equivalent Fractions (bar model)",
+          url: "https://www.youtube.com/results?search_query=equivalent+fractions+bar+model"
+        }
+      ]
+    }
   }
 };
