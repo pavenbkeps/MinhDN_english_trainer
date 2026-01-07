@@ -187,8 +187,7 @@ window.BEDTIME = {
       "en": "“Never stop asking how things work.”",
       "vi": "“Đừng bao giờ ngừng hỏi mọi thứ vận hành như thế nào.”"
     }
-  ],
-  
+  ],  
   "A Bedtime Journey Through Vietnam’s Capitals": [
     {
       "en": "Before going to sleep, Dad wants to tell you a special story.",
@@ -393,7 +392,6 @@ window.BEDTIME = {
       "vi": "Chúc ngủ ngon nhé, nhà thám hiểm nhỏ của bố."
     }
   ],
-
   "The Sun’s Big Warm Hug": [
     {
       "en": "Before we start, Dad has a tiny geography secret for you.",
@@ -697,5 +695,174 @@ window.BEDTIME = {
       "en": "Good night, my future hero.",
       "vi": "Chúc ngủ ngon, người hùng tương lai của bố."
     }
-  ]     
+  ],
+  "The Solar System Family – A Dance of Planets": [
+    {
+      "en": "Tonight, let’s hop into a magical spaceship and go on a slow, gentle journey through the sky.",
+      "vi": "Tối nay, chúng ta hãy cùng bước lên một con tàu vũ trụ kỳ diệu và bắt đầu chuyến du hành chậm rãi, êm ái trên bầu trời nhé."
+    },
+    {
+      "en": "Dad sits beside you and whispers, “We are going to visit a very special family.”",
+      "vi": "Bố ngồi bên cạnh và thì thầm: “Chúng ta sắp đến thăm một gia đình rất đặc biệt.”"
+    },
+    {
+      "en": "This family is called the Solar System.",
+      "vi": "Gia đình ấy được gọi là Hệ Mặt Trời."
+    },
+
+    {
+      "en": "At the center of the family stands the Father Sun.",
+      "vi": "Đứng ở trung tâm gia đình là Mặt Trời Cha."
+    },
+    {
+      "en": "He is huge, bright, and very, very hot.",
+      "vi": "Ông rất to lớn, rất sáng và vô cùng nóng."
+    },
+    {
+      "en": "With his invisible arms called gravity, he gently holds all the planets and keeps them dancing around him.",
+      "vi": "Bằng những cánh tay vô hình gọi là trọng lực, ông nhẹ nhàng giữ các hành tinh và giúp họ cùng nhau nhảy múa quanh mình."
+    },
+
+    {
+      "en": "The closest child running around Father Sun is Mercury.",
+      "vi": "Người con chạy gần Mặt Trời Cha nhất là Sao Thủy."
+    },
+    {
+      "en": "Mercury is the closest planet to the Sun and also the fastest runner.",
+      "vi": "Sao Thủy là hành tinh gần Mặt Trời nhất và cũng là hành tinh chạy nhanh nhất."
+    },
+    {
+      "en": "During the day, Mercury becomes very hot. At night, it becomes extremely cold.",
+      "vi": "Ban ngày, Sao Thủy rất nóng. Ban đêm, chú ấy lại trở nên cực kỳ lạnh."
+    },
+    
+    {
+      "en": "Next comes Venus, the bright and beautiful sister.",
+      "vi": "Tiếp theo là người chị xinh đẹp và rực rỡ – Sao Kim."
+    },
+    {
+      "en": "Venus is not the closest planet to the Sun, but she is the hottest planet of all.",
+      "vi": "Sao Kim không phải là hành tinh gần Mặt Trời nhất, nhưng lại là hành tinh nóng nhất."
+    },
+    {
+      "en": "She wears a thick blanket of clouds that traps heat like a giant oven.",
+      "vi": "Chị ấy khoác một tấm chăn mây rất dày, giữ nhiệt lại như một chiếc lò nướng khổng lồ."
+    },
+
+    {
+      "en": "Then the spaceship slowly arrives at our home, the Earth.",
+      "vi": "Sau đó, con tàu từ từ đến ngôi nhà của chúng ta – Trái Đất."
+    },
+    {
+      "en": "Earth is just right. Not too hot. Not too cold.",
+      "vi": "Trái Đất vừa vặn hoàn hảo. Không quá nóng. Không quá lạnh."
+    },
+    {
+      "en": "Earth has liquid water, fresh air, and many forms of life.",
+      "vi": "Trái Đất có nước lỏng, không khí trong lành và rất nhiều sự sống."
+    },
+    {
+      "en": "From space, Earth looks like a calm blue marble floating quietly.",
+      "vi": "Từ vũ trụ, Trái Đất trông như một viên bi xanh hiền hòa đang trôi lặng lẽ."
+    },
+
+    {
+      "en": "Just beyond Earth is Mars, the quiet red brother.",
+      "vi": "Ngay sau Trái Đất là Sao Hỏa – người anh em đỏ trầm lặng."
+    },
+    {
+      "en": "Mars is called the Red Planet because of its rusty-colored dust.",
+      "vi": "Sao Hỏa được gọi là Hành tinh Đỏ vì lớp bụi màu rỉ sắt."
+    },
+    {
+      "en": "Mars has the biggest volcano in the entire Solar System.",
+      "vi": "Sao Hỏa có ngọn núi lửa lớn nhất trong toàn bộ Hệ Mặt Trời."
+    },
+
+    {
+      "en": "Now the spaceship approaches the giant of the family: Jupiter.",
+      "vi": "Bây giờ, con tàu tiến đến người khổng lồ của gia đình – Sao Mộc."
+    },
+    {
+      "en": "Jupiter is the biggest planet of all.",
+      "vi": "Sao Mộc là hành tinh lớn nhất trong tất cả."
+    },
+    {
+      "en": "If all other planets were marbles, Jupiter would be a giant ball.",
+      "vi": "Nếu các hành tinh khác là những viên bi, thì Sao Mộc sẽ là một quả bóng khổng lồ."
+    },
+    {
+      "en": "He has a Great Red Spot, a storm that has been spinning for hundreds of years.",
+      "vi": "Chú ấy có Vết Đỏ Lớn – một cơn bão đã quay suốt hàng trăm năm."
+    },
+
+    {
+      "en": "Next is Saturn, the planet with the most beautiful rings.",
+      "vi": "Tiếp theo là Sao Thổ – hành tinh có những chiếc nhẫn đẹp nhất."
+    },
+    {
+      "en": "Saturn’s rings are made of ice and rock, shining softly in space.",
+      "vi": "Những chiếc nhẫn của Sao Thổ được tạo nên từ băng và đá, lấp lánh dịu dàng trong vũ trụ."
+    },
+    {
+      "en": "Saturn is so light that it could float on water, if a bathtub were big enough.",
+      "vi": "Sao Thổ nhẹ đến mức có thể nổi trên nước, nếu có một chiếc bồn tắm đủ lớn."
+    },
+
+    {
+      "en": "Far away, the spaceship reaches Uranus, the cold ice giant.",
+      "vi": "Ở rất xa, con tàu đến Sao Thiên Vương – người khổng lồ băng giá."
+    },
+    {
+      "en": "Uranus is the coldest planet in the Solar System.",
+      "vi": "Sao Thiên Vương là hành tinh lạnh nhất trong Hệ Mặt Trời."
+    },
+    {
+      "en": "Unlike other planets, Uranus spins on its side, rolling through space.",
+      "vi": "Không giống các hành tinh khác, Sao Thiên Vương quay nghiêng, lăn mình trong vũ trụ."
+    },
+
+    {
+      "en": "At the edge of the family lives Neptune.",
+      "vi": "Ở rìa xa nhất của gia đình là Sao Hải Vương."
+    },
+    {
+      "en": "Neptune is the farthest planet from the Sun.",
+      "vi": "Sao Hải Vương là hành tinh xa Mặt Trời nhất."
+    },
+    {
+      "en": "It has the strongest winds, faster than any storm on Earth.",
+      "vi": "Nơi đây có những cơn gió mạnh nhất, nhanh hơn bất kỳ cơn bão nào trên Trái Đất."
+    },
+
+    {
+      "en": "That night, the spaceship becomes very quiet.",
+      "vi": "Đêm ấy, con tàu vũ trụ trở nên thật yên tĩnh."
+    },
+    {
+      "en": "Stars twinkle softly like tiny night-lights outside the window.",
+      "vi": "Những vì sao lấp lánh dịu dàng như những chiếc đèn ngủ nhỏ xíu ngoài cửa sổ."
+    },
+    {
+      "en": "Earth slowly turns below, safe and peaceful.",
+      "vi": "Trái Đất từ từ xoay bên dưới, an toàn và bình yên."
+    },
+    {
+      "en": "Before sleeping, let’s whisper the names of our 8 friends one last time.",
+      "vi": "Trước khi ngủ, chúng ta hãy thì thầm tên của 8 người bạn ấy một lần cuối nhé."
+    },
+    {
+      "en": "Mercury, Venus, Earth, and Mars stay close to the warm Sun. Then come the giants Jupiter and Saturn. Finally, the cold friends Uranus and Neptune live far away.",
+      "vi": "Sao Thủy, Sao Kim, Trái Đất và Sao Hỏa ở gần Mặt Trời ấm áp. Tiếp theo là những gã khổng lồ Sao Mộc và Sao Thổ. Cuối cùng là những người bạn lạnh giá Sao Thiên Vương và Sao Hải Vương ở rất xa."
+    },    
+    {
+      "en": "Dad smiles and says, “Dreams are like planets. Each one has its own place.”",
+      "vi": "Bố mỉm cười và nói: “Ước mơ cũng giống như các hành tinh. Mỗi ước mơ đều có vị trí riêng.”"
+    },
+    {
+      "en": "Good night, my little astronomer.",
+      "vi": "Chúc ngủ ngon, nhà thiên văn học tí hon của bố."
+    }
+  ]
+
 };
