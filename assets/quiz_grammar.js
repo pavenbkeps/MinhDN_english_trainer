@@ -302,8 +302,8 @@ window.Grammar = (function(){
       .learn-card-examples{ border-left: 6px solid rgba(59,130,246,.55); }
       .learn-card-links{ border-left: 6px solid rgba(245,158,11,.55); }
 
-      .learn-points{ margin:0; padding-left: 18px; line-height: 1.55; font-size: 16px; }
-      .learn-points li{ margin: 8px 0; }
+      .learn-points{ margin:0; padding-left: 0; line-height: 1.55; font-size: 16px; list-style: none; }
+      .learn-points li{ margin: 10px 0; }
 
       .learn-example{
         border: 1px dashed rgba(229,231,235,.95);
@@ -503,13 +503,23 @@ window.Grammar = (function(){
       };
     }
 
-
-    // click outside closes
+    // click outside => close + go Home (avoid blank screen)
     if(modal){
       modal.addEventListener("click", (e)=>{
-        if(e.target === modal) closeLearn();
+        if(e.target === modal){
+          closeLearn();
+
+          const homeBtn = document.getElementById("btnHome");
+          if(homeBtn && typeof homeBtn.click === "function"){
+            homeBtn.click();
+          }else if(window.UI && typeof UI.showScreen === "function"){
+            UI.showScreen("screenHome");
+          }
+        }
       });
     }
+
+
   }
 
   return { start, openLearn };

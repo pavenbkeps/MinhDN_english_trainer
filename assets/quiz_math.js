@@ -172,7 +172,7 @@ window.MathQuiz = (function(){
         .learn-x{border:none;background:rgba(17,24,39,.06);border:1px solid rgba(229,231,235,.95);border-radius:12px;padding:8px 10px;cursor:pointer;font-weight:900}
         .learn-card{border:1px solid rgba(229,231,235,.95);border-radius:16px;padding:12px;margin:10px 0;background:rgba(249,250,251,.9)}
         .learn-card-title{font-weight:950;margin-bottom:8px}
-        .learn-points{margin:0;padding-left:18px;line-height:1.6}
+        .learn-points{margin:0;padding-left:0;line-height:1.6;list-style:none}
         .learn-example{border:1px dashed rgba(229,231,235,.95);border-radius:14px;padding:10px 12px;margin:10px 0;background:rgba(249,250,251,.9)}
         .learn-example .en{font-weight:850;color:#1d4ed8;font-size:16px}
         .learn-example .vi{margin-top:6px;opacity:.92;font-size:15px}
@@ -287,9 +287,19 @@ window.MathQuiz = (function(){
 
     if(modal){
       modal.addEventListener("click", (e)=>{
-        if(e.target === modal) modal.remove();
+        if(e.target === modal){
+          modal.remove();
+
+          const homeBtn = document.getElementById("btnHome");
+          if(homeBtn && typeof homeBtn.click === "function"){
+            homeBtn.click();
+          }else if(window.UI && typeof UI.showScreen === "function"){
+            UI.showScreen("screenHome");
+          }
+        }
       });
     }
+
 
     try{
       const panel = modal?.querySelector(".learn-panel");
